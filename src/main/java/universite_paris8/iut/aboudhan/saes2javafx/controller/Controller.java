@@ -105,9 +105,7 @@ public class Controller implements Initializable {
     private HelpVue vueHelpActive = null;
     private javafx.scene.layout.StackPane calqueRegles = null;
 
-    private boolean soinEnCooldown = false;
-    private boolean rageEnCooldown = false;
-    private boolean gelEnCooldown = false;
+    private final Map<TypePotion, Boolean> potionsEnCooldown = new EnumMap<>(TypePotion.class);
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
