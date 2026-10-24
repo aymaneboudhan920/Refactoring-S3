@@ -401,21 +401,9 @@ public class Controller implements Initializable {
                     }
                 },
                 (typeItem) -> {
-                    if (typeItem.equals("potion_soin")) {
-                        if (env.getArgent() >= PotionSoin.prixAchat) {
-                            env.reduireArgent(PotionSoin.prixAchat);
-                            env.setNbPotionSoin(env.getNbPotionSoin() + 1);
-                        }
-                    } else if (typeItem.equals("potion_rage")) {
-                        if (env.getArgent() >= PotionRage.prixAchat) {
-                            env.reduireArgent(PotionRage.prixAchat);
-                            env.setNbPotionRage(env.getNbPotionRage() + 1);
-                        }
-                    } else if (typeItem.equals("potion_gel")) {
-                        if (env.getArgent() >= PotionGel.prixAchat) {
-                            env.reduireArgent(PotionGel.prixAchat);
-                            env.setNbPotionGel(env.getNbPotionGel() + 1);
-                        }
+                    TypePotion typePotion = TypePotion.depuisIdentifiant(typeItem);
+                    if (typePotion != null) {
+                        acheterPotion(typePotion);
                     } else {
                         int prix = switch (typeItem) {
                             case "scientifique" -> TourScientifique.prixAchat;
@@ -845,57 +833,54 @@ public class Controller implements Initializable {
         vueParametresActive.afficherSur(conteneurMenuPrincipal);
     }
 
-    @FXML
+ @FXML
     private void actionUtiliserSoin() {
-        if (env.getNbPotionSoin() > 0 && !soinEnCooldown) {
-            soinEnCooldown = true;
-            env.setNbPotionSoin(env.getNbPotionSoin() - 1);
-
-            PotionSoin soin = new PotionSoin();
-            soin.appliquerEffet(env);
-            updateCompteurs();
-
-            btnPotionSoin.setDisable(true);
-            potionVue.animerJaugeActive(btnPotionSoin, 0.5, () -> {
-                btnPotionSoin.setDisable(false);
-                soinEnCooldown = false;
-            });
-        }
+        utiliserPotion(TypePotion.SOIN, btnPotionSoin, env.getNbPotionSoin(), env::setNbPotionSoin);
     }
 
     @FXML
     private void actionUtiliserRage() {
-        if (env.getNbPotionRage() > 0 && !rageEnCooldown) {
-            rageEnCooldown = true;
-            env.setNbPotionRage(env.getNbPotionRage() - 1);
-
-            PotionRage rage = new PotionRage();
-            rage.appliquerEffet(env);
-
-            btnPotionRage.setDisable(true);
-            potionVue.animerJaugeActive(btnPotionRage, 5.0, () -> {
-                btnPotionRage.setDisable(false);
-                rageEnCooldown = false;
-            });
-        }
+        utiliserPotion(TypePotion.RAGE, btnPotionRage, env.getNbPotionRage(), env::setNbPotionRage);
     }
 
     @FXML
     private void actionUtiliserGel() {
-        if (env.getNbPotionGel() > 0 && !gelEnCooldown) {
-            gelEnCooldown = true;
-            env.setNbPotionGel(env.getNbPotionGel() - 1);
+        utiliserPotion(TypePotion.GEL, btnPotionGel, env.getNbPotionGel(), env::setNbPotionGel);
+    }
 
-            PotionGel gel = new PotionGel();
-            gel.appliquerEffet(env);
-
-            btnPotionGel.setDisable(true);
-
-            potionVue.animerJaugeActive(btnPotionGel, 3.0, () -> {
-                btnPotionGel.setDisable(false);
-                gelEnCooldown = false;
-            });
+   private void utiliserPotion(TypePotion type, Button bouton, int quantite,
+                                java.util.function.IntConsumer modifierQuantite) {
+        if (quantite <= 0 || potionsEnCooldown.getOrDefault(type, false)) {
+            return;
         }
+
+        potionsEnCooldown.put(type, true);
+        modifierQuantite.accept(quantite - 1);
+
+        Potion potion = type.creerPotion();
+        potion.appliquerEffet(env);
+        updateCompteurs();
+
+        bouton.setDisable(true);
+        potionVue.animerJaugeActive(bouton, type.getCooldown(), () -> {
+            bouton.setDisable(false);
+            potionsEnCooldown.put(type, false);
+        });
+    }
+
+    private void acheterPotion(TypePotion type) {
+        int prix = type.getPrix();
+        if (env.getArgent() < prix) {
+            return;
+        }
+
+        env.reduireArgent(prix);
+        switch (type) {
+            case SOIN -> env.setNbPotionSoin(env.getNbPotionSoin() + 1);
+            case RAGE -> env.setNbPotionRage(env.getNbPotionRage() + 1);
+            case GEL -> env.setNbPotionGel(env.getNbPotionGel() + 1);
+        }
+        updateCompteurs();
     }
 
     @FXML
