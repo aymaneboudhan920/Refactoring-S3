@@ -112,6 +112,8 @@ public class Controller implements Initializable {
 
     private final Map<TypePotion, Boolean> potionsEnCooldown = new EnumMap<>(TypePotion.class);
 
+    private ControllerShop controllerShop;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Platform.runLater(() -> conteneurMenuPrincipal.requestFocus());
@@ -142,6 +144,10 @@ public class Controller implements Initializable {
         this.potionVue = new PotionVue();
         pageAccueil.setVisible(true);
         conteneurJeu.setVisible(false);
+
+        ControllerPotion controllerPotion = new ControllerPotion(env);
+        ControllerTour controllerTour = new ControllerTour(env, inventaireModele, inventaireVue, this);
+        controllerShop = new ControllerShop(env, conteneurPrincipal, this,controllerPotion, controllerTour);
     }
 
     private void configurerBindings() {
@@ -350,7 +356,7 @@ public class Controller implements Initializable {
         };
     }
 
-    private void verrouillerInterface(boolean verrouiller) {
+    public void verrouillerInterface(boolean verrouiller) {
         if (boutonStart != null) boutonStart.setDisable(verrouiller || jeuDemarre);
         if (boutonShop != null) boutonShop.setDisable(verrouiller);
         if (boutonTuto != null) boutonTuto.setDisable(verrouiller);
@@ -409,68 +415,23 @@ public class Controller implements Initializable {
         }
     }
 
+    public void mettreEnPause() {
+        if (jeuDemarre) {
+            gameLoop.stop();
+            timeline.pause();
+        }
+    }
+
+    public void reprendreJeu() {
+        if (jeuDemarre) {
+            gameLoop.start();
+            timeline.play();
+        }
+    }
+
     @FXML
     private void actionBoutonShop() {
-        if (shopActuel != null) {
-            shopActuel.cacher(conteneurPrincipal);
-            if (jeuDemarre) { gameLoop.start(); timeline.play(); }
-            shopActuel = null;
-            return;
-        }
-
-        if (jeuDemarre) { gameLoop.stop(); timeline.pause(); }
-        verrouillerInterface(true);
-
-        int vagueActu = env.getGestionnaireVagues().getNumVagueActu() + 1;
-
-        shopActuel = new ShopVue(
-                () -> {
-                    if (shopActuel != null) {
-                        shopActuel.cacher(conteneurPrincipal);
-                        shopActuel = null;
-                        verrouillerInterface(false);
-                        if (jeuDemarre) { gameLoop.start(); timeline.play(); }
-                    }
-                },
-                (typeItem) -> {
-                    TypePotion typePotion = TypePotion.depuisIdentifiant(typeItem);
-                    if (typePotion != null) {
-                        acheterPotion(typePotion);
-                    } else {
-                        int prix = switch (typeItem) {
-                            case "scientifique" -> TourScientifique.prixAchat;
-                            case "chimiste"      -> TourChimiste.prixAchat;
-                            case "scanner"       -> TourScanner.prixAchat;
-                            case "rayon_x"       -> TourRayonX.prixAchat;
-                            default              -> 0;
-                        };
-
-                        int caseLibre = inventaireModele.getPremiereCaseLibre();
-                        if (env.getArgent() >= prix && caseLibre != -1) {
-                            env.reduireArgent(prix);
-                            updateCompteurs();
-                            inventaireModele.setTourCase(caseLibre, typeItem);
-                            inventaireVue.installerTour(caseLibre, typeItem);
-
-                            Tour nouvelleTourAchetee = creerTourDepuisType(typeItem);
-                            if (nouvelleTourAchetee != null) {
-                                env.getTourVersIndexInventaire().put(nouvelleTourAchetee, caseLibre);
-                            }
-                        }
-                    }
-
-                    if (shopActuel != null) {
-                        shopActuel.cacher(conteneurPrincipal);
-                        shopActuel = null;
-                        verrouillerInterface(false);
-                        if (jeuDemarre) { gameLoop.start(); timeline.play(); }
-                    }
-                },
-                vagueActu, env.getArgent(),
-                TourScientifique.prixAchat, TourChimiste.prixAchat, TourScanner.prixAchat, TourRayonX.prixAchat,
-                PotionSoin.prixAchat, PotionRage.prixAchat, PotionGel.prixAchat
-        );
-        shopActuel.afficherSur(conteneurPrincipal);
+        controllerShop.actionBoutonShop();
     }
 
     private void mettreAJourLabelVague() {
