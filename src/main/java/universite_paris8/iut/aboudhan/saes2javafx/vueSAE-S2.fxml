@@ -18,7 +18,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane prefHeight="780.0" prefWidth="1195.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="universite_paris8.iut.aboudhan.saes2javafx.controller.Controller">
+<StackPane prefHeight="780.0" prefWidth="1195.0" stylesheets="@../../../../../../resources/universite_paris8/iut/aboudhan/saes2javafx/style.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="universite_paris8.iut.aboudhan.saes2javafx.controller.Controller">
    <children>
 
       <BorderPane fx:id="conteneurJeu" prefHeight="780.0" prefWidth="1195.0" styleClass="background">
@@ -33,7 +33,7 @@
                                  <children>
                                     <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@vue/catalogue.png" />
+                                          <Image url="@../../../../../../resources/universite_paris8/iut/aboudhan/saes2javafx/vue/catalogue.png" />
                                        </image>
                                        <VBox.margin>
                                           <Insets bottom="5.0" top="5.0" />
@@ -269,7 +269,7 @@
                                  <graphic>
                                     <ImageView fitHeight="50.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@vue/info.png" />
+                                          <Image url="@../../../../../../resources/universite_paris8/iut/aboudhan/saes2javafx/vue/info.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>
@@ -279,7 +279,7 @@
                                  <graphic>
                                     <ImageView fitHeight="50.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@vue/didactitiel.png" />
+                                          <Image url="@../../../../../../resources/universite_paris8/iut/aboudhan/saes2javafx/vue/didactitiel.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>
@@ -289,7 +289,7 @@
                                  <graphic>
                                     <ImageView fitHeight="50.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@vue/parametre.png" />
+                                          <Image url="@../../../../../../resources/universite_paris8/iut/aboudhan/saes2javafx/vue/parametre.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>
@@ -346,7 +346,7 @@
                            <children>
                               <ImageView fitHeight="40.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                                  <image>
-                                    <Image url="@vue/infecte.png" />
+                                    <Image url="@../../../../../../resources/universite_paris8/iut/aboudhan/saes2javafx/vue/infecte.png" />
                                  </image>
                               </ImageView>
                               <Label fx:id="labelInfectes" textFill="WHITE" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
@@ -376,7 +376,7 @@
                            <children>
                               <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                                  <image>
-                                    <Image url="@vue/piece.png" />
+                                    <Image url="@../../../../../../resources/universite_paris8/iut/aboudhan/saes2javafx/vue/piece.png" />
                                  </image>
                               </ImageView>
                               <Label fx:id="labelArgent" textFill="WHITE" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
@@ -397,7 +397,7 @@
                            <children>
                               <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@vue/caddie.png" />
+                                    <Image url="@../../../../../../resources/universite_paris8/iut/aboudhan/saes2javafx/vue/caddie.png" />
                                  </image>
                                  <VBox.margin>
                                     <Insets bottom="10.0" left="10.0" right="10.0" top="15.0" />
@@ -432,7 +432,7 @@
                                  <children>
                                     <ImageView fitHeight="40.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@vue/potion_soin.png" />
+                                          <Image url="@../../../../../../resources/universite_paris8/iut/aboudhan/saes2javafx/vue/potion_soin.png" />
                                        </image>
                                     </ImageView>
                                     <Label fx:id="labelPotionSoin" text="0" textFill="WHITE" style="-fx-background-color: rgba(0,0,0,0.6); -fx-background-radius: 4; -fx-padding: 1 3 1 3;">
@@ -453,7 +453,7 @@
                                  <children>
                                     <ImageView fitHeight="40.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@vue/potion_rage.png" />
+                                          <Image url="@../../../../../../resources/universite_paris8/iut/aboudhan/saes2javafx/vue/potion_rage.png" />
                                        </image>
                                     </ImageView>
                                     <Label fx:id="labelPotionRage" text="0" textFill="WHITE" style="-fx-background-color: rgba(0,0,0,0.6); -fx-background-radius: 4; -fx-padding: 1 3 1 3;">
@@ -474,7 +474,7 @@
                                  <children>
                                     <ImageView fitHeight="40.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@vue/potion_gel.png" />
+                                          <Image url="@../../../../../../resources/universite_paris8/iut/aboudhan/saes2javafx/vue/potion_gel.png" />
                                        </image>
                                     </ImageView>
                                     <Label fx:id="labelPotionGel" text="0" textFill="WHITE" style="-fx-background-color: rgba(0,0,0,0.6); -fx-background-radius: 4; -fx-padding: 1 3 1 3;">
@@ -493,7 +493,7 @@
                            <graphic>
                               <ImageView fitHeight="40.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@vue/plus.png" />
+                                    <Image url="@../../../../../../resources/universite_paris8/iut/aboudhan/saes2javafx/vue/plus.png" />
                                  </image>
                               </ImageView>
                            </graphic>
@@ -521,7 +521,7 @@
                               </Label>
                               <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@vue/start.png" />
+                                    <Image url="@../../../../../../resources/universite_paris8/iut/aboudhan/saes2javafx/vue/start.png" />
                                  </image>
                                  <VBox.margin>
                                     <Insets bottom="10.0" />
