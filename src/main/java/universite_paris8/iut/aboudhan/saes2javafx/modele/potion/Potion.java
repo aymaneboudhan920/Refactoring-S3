@@ -5,13 +5,23 @@ import universite_paris8.iut.aboudhan.saes2javafx.modele.jeu.Environnement;
 public abstract class Potion {
     private final String nom;
     private final int prixAchat;
+    protected EffetPotionStrategy effetStrategy;
 
-    public Potion(String nom, int prixAchat) {
+    public Potion(String nom, int prixAchat, EffetPotionStrategy effetStrategy) {
         this.nom = nom;
         this.prixAchat = prixAchat;
+        this.effetStrategy = effetStrategy;
     }
 
-    public abstract void appliquerEffet(Environnement env);
+    public void appliquerEffet(Environnement env) {
+        if (effetStrategy != null) {
+            effetStrategy.appliquerEffet(env);
+        }
+    }
+
+    public void setEffetStrategy(EffetPotionStrategy effetStrategy) {
+        this.effetStrategy = effetStrategy;
+    }
 
     public String getNom() {
         return nom;
