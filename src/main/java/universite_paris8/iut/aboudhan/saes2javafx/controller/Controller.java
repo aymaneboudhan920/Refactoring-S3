@@ -862,12 +862,13 @@ public class Controller implements Initializable {
         updateCompteurs();
 
         bouton.setDisable(true);
-        potionVue.animerJaugeActive(bouton, type.getCooldown(), () -> {
+        
+       potionVue.animerJaugeActive(bouton, 5.0, () -> {
             bouton.setDisable(false);
             potionsEnCooldown.put(type, false);
         });
     }
-
+    
     private void acheterPotion(TypePotion type) {
         int prix = type.getPrix();
         if (env.getArgent() < prix) {
