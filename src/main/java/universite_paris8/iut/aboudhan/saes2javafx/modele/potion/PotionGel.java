@@ -1,35 +1,18 @@
 package universite_paris8.iut.aboudhan.saes2javafx.modele.potion;
+import modele.microbe.Microbe;
 
-import javafx.animation.PauseTransition;
-import javafx.util.Duration;
-import universite_paris8.iut.aboudhan.saes2javafx.modele.jeu.Environnement;
-import universite_paris8.iut.aboudhan.saes2javafx.modele.microbe.Microbe;
+public class EffetGel implements EffetPotionStrategy {
+    private double facteurRalentissement;
+    private int duree;
 
-public class PotionGel extends Potion {
-
-    public static final int prixAchat = 75;
-
-    public PotionGel() {
-        super("Potion de Gel", prixAchat);
+    public EffetGel(double facteurRalentissement, int duree) {
+        this.facteurRalentissement = facteurRalentissement;
+        this.duree = duree;
     }
 
     @Override
-    public void appliquerEffet(Environnement env) {
-        env.setMicrobesGeles(true);
-
-        for (Microbe m : env.getMicrobesActifs()) {
-            m.setVitesseActu(0);
-        }
-
-        PauseTransition pause = new PauseTransition(Duration.seconds(3));
-        pause.setOnFinished(event -> {
-            env.setMicrobesGeles(false);
-
-            for (Microbe m : env.getMicrobesActifs()) {
-                m.reinitialiserVitesse();
-            }
-        });
-
-        pause.play();
+    public void appliquerEffet(Microbe microbe) {
+        microbe.ralentir(facteurRalentissement, duree);
+        System.out.println("Le microbe est gelé !");
     }
 }
