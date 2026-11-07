@@ -1,0 +1,6 @@
+package universite_paris8.iut.aboudhan.saes2javafx.modele.potion;
+import modele.microbe.Microbe;
+
+public interface EffetPotionStrategy {
+    void appliquerEffet(Microbe microbe);
+}
