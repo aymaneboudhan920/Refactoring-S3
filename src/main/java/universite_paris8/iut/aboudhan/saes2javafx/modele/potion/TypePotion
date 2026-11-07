@@ -1,0 +1,36 @@
+package universite_paris8.iut.aboudhan.saes2javafx.modele.potion;
+
+public enum TypePotion {
+    SOIN("potion_soin", PotionSoin.prixAchat, new PotionSoin().getCooldown()),
+    RAGE("potion_rage", PotionRage.prixAchat, new PotionRage().getCooldown()),
+    GEL("potion_gel", PotionGel.prixAchat, new PotionGel().getCooldown());
+
+    private final String identifiant;
+    private final int prix;
+    private final double cooldown;
+
+    TypePotion(String identifiant, int prix, double cooldown) {
+        this.identifiant = identifiant;
+        this.prix = prix;
+        this.cooldown = cooldown;
+    }
+
+    public String getIdentifiant() { return identifiant; }
+    public int getPrix() { return prix; }
+    public double getCooldown() { return cooldown; }
+
+    public static TypePotion depuisIdentifiant(String id) {
+        for (TypePotion tp : values()) {
+            if (tp.identifiant.equals(id)) return tp;
+        }
+        return null;
+    }
+
+    public Potion creerPotion() {
+        return switch (this) {
+            case SOIN -> new PotionSoin();
+            case RAGE -> new PotionRage();
+            case GEL -> new PotionGel();
+        };
+    }
+}
