@@ -1,0 +1,23 @@
+package universite_paris8.iut.aboudhan.saes2javafx.modele.potion;
+
+import javafx.animation.PauseTransition;
+import javafx.util.Duration;
+import universite_paris8.iut.aboudhan.saes2javafx.modele.jeu.Environnement;
+import universite_paris8.iut.aboudhan.saes2javafx.modele.tour.Tour;
+
+public class StrategyRage implements EffetPotionStrategy {
+    @Override
+    public void appliquerEffet(Environnement env) {
+        for (Tour tour : env.getToursPosees()) {
+            tour.setMultiplicateurVitesse(2.0);
+        }
+
+        PauseTransition dureeEffet = new PauseTransition(Duration.seconds(5));
+        dureeEffet.setOnFinished(event -> {
+            for (Tour tour : env.getToursPosees()) {
+                tour.setMultiplicateurVitesse(1.0);
+            }
+        });
+        dureeEffet.play();
+    }
+}

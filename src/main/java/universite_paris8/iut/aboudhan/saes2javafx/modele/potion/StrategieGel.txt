@@ -1,0 +1,9 @@
+package universite_paris8.iut.aboudhan.saes2javafx.modele.potion;
+
+public class PotionGel extends Potion {
+    public static final int prixAchat = 75;
+
+    public PotionGel() {
+        super("Potion de Gel", prixAchat, new GelStrategy());
+    }
+}
