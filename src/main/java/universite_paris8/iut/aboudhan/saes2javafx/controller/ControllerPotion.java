@@ -3,7 +3,6 @@ package universite_paris8.iut.aboudhan.saes2javafx.controller;
 import universite_paris8.iut.aboudhan.saes2javafx.modele.jeu.Environnement;
 import universite_paris8.iut.aboudhan.saes2javafx.modele.potion.*;
 
-
 public class ControllerPotion {
 
     private final Environnement env;
@@ -40,4 +39,3 @@ public class ControllerPotion {
         return true;
     }
 }
-
