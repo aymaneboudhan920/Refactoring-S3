@@ -21,10 +21,6 @@ public class GestionnaireVagues {
         creerListeMicrobes();
     }
 
-
-
-
-
     public void creerListeMicrobes() {
         listeMicrobes.add(new Microbe(0.8, 45, 2, 1, TypeMicrobe.RHINOVIRUS, null));
         listeMicrobes.add(new Microbe(1.0, 60, 3, 1, TypeMicrobe.NOROVIRUS, null));

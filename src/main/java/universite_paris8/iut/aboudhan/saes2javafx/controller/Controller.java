@@ -4,15 +4,21 @@ import javafx.animation.*;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
+import javafx.geometry.VPos;
 import javafx.scene.control.Button;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
 
 import java.net.URL;
 import java.util.*;
@@ -25,6 +31,7 @@ import universite_paris8.iut.aboudhan.saes2javafx.modele.jeu.Environnement;
 import universite_paris8.iut.aboudhan.saes2javafx.modele.microbe.Microbe;
 import universite_paris8.iut.aboudhan.saes2javafx.modele.microbe.TypeMicrobe;
 import universite_paris8.iut.aboudhan.saes2javafx.modele.microbe.Vague;
+import universite_paris8.iut.aboudhan.saes2javafx.modele.potion.*;
 import universite_paris8.iut.aboudhan.saes2javafx.modele.potion.PotionGel;
 import universite_paris8.iut.aboudhan.saes2javafx.modele.potion.PotionRage;
 import universite_paris8.iut.aboudhan.saes2javafx.modele.potion.PotionSoin;
@@ -64,9 +71,8 @@ public class Controller implements Initializable {
     @FXML private Label labelPotionGel;
     @FXML private Button btnPlusShop;
 
-    @FXML private Button caseInventaire1, caseInventaire2, caseInventaire3, caseInventaire4, caseInventaire5, caseInventaire6, caseInventaire7, caseInventaire8;
-    @FXML private ImageView imageInventaire1, imageInventaire2, imageInventaire3, imageInventaire4, imageInventaire5, imageInventaire6, imageInventaire7, imageInventaire8;
-    @FXML private Label labelInventaire1, labelInventaire2, labelInventaire3, labelInventaire4, labelInventaire5, labelInventaire6, labelInventaire7, labelInventaire8;
+    private static final int NB_CASES_INVENTAIRE = 8;
+    @FXML private GridPane grilleInventaire;
 
     @FXML private StackPane conteneurMenuPrincipal;
     @FXML private BorderPane conteneurJeu;
@@ -106,9 +112,9 @@ public class Controller implements Initializable {
     private HelpVue vueHelpActive = null;
     private javafx.scene.layout.StackPane calqueRegles = null;
 
-    private boolean soinEnCooldown = false;
-    private boolean rageEnCooldown = false;
-    private boolean gelEnCooldown = false;
+    private final Map<TypePotion, Boolean> potionsEnCooldown = new EnumMap<>(TypePotion.class);
+
+    private ControllerShop controllerShop;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -140,9 +146,11 @@ public class Controller implements Initializable {
         this.potionVue = new PotionVue();
         pageAccueil.setVisible(true);
         conteneurJeu.setVisible(false);
-    }
 
-    // --- SOUS-MÉTHODES D'INITIALISATION ---
+        ControllerPotion controllerPotion = new ControllerPotion(env);
+        ControllerTour controllerTour = new ControllerTour(env, inventaireModele, inventaireVue, this);
+        controllerShop = new ControllerShop(env, conteneurPrincipal, this,controllerPotion, controllerTour);
+    }
 
     private void configurerBindings() {
         labelArgent.textProperty().bind(env.argentProperty().asString());
@@ -153,9 +161,38 @@ public class Controller implements Initializable {
     }
 
     private void rassemblerListesInventaire() {
-        boutonsInventaire.addAll(Arrays.asList(caseInventaire1, caseInventaire2, caseInventaire3, caseInventaire4, caseInventaire5, caseInventaire6, caseInventaire7, caseInventaire8));
-        imagesInventaire.addAll(Arrays.asList(imageInventaire1, imageInventaire2, imageInventaire3, imageInventaire4, imageInventaire5, imageInventaire6, imageInventaire7, imageInventaire8));
-        labelsInventaire.addAll(Arrays.asList(labelInventaire1, labelInventaire2, labelInventaire3, labelInventaire4, labelInventaire5, labelInventaire6, labelInventaire7, labelInventaire8));
+        for (int i = 0; i < NB_CASES_INVENTAIRE; i++) {
+            ImageView image = new ImageView();
+            image.setFitHeight(50);
+            image.setFitWidth(50);
+            image.setPickOnBounds(true);
+            image.setPreserveRatio(true);
+            VBox.setMargin(image, new Insets(5));
+
+            Label label = new Label("VIDE");
+            label.getStyleClass().add("vague");
+            label.setAlignment(Pos.CENTER);
+            label.setContentDisplay(ContentDisplay.CENTER);
+            label.setTextAlignment(TextAlignment.CENTER);
+            label.setTextFill(Color.WHITE);
+            label.setFont(new Font("Impact", 15));
+
+            VBox contenuCase = new VBox(image, label);
+            contenuCase.setAlignment(Pos.BOTTOM_CENTER);
+
+            Button caseInventaire = new Button();
+            caseInventaire.setMnemonicParsing(false);
+            caseInventaire.getStyleClass().add("btn-inventaire-tour");
+            caseInventaire.setGraphic(contenuCase);
+
+            grilleInventaire.add(caseInventaire, i, 0);
+            GridPane.setHalignment(caseInventaire, HPos.CENTER);
+            GridPane.setValignment(caseInventaire, VPos.CENTER);
+
+            boutonsInventaire.add(caseInventaire);
+            imagesInventaire.add(image);
+            labelsInventaire.add(label);
+        }
     }
 
     private void configurerPanneauAction() {
@@ -321,7 +358,7 @@ public class Controller implements Initializable {
         };
     }
 
-    private void verrouillerInterface(boolean verrouiller) {
+    public void verrouillerInterface(boolean verrouiller) {
         if (boutonStart != null) boutonStart.setDisable(verrouiller || jeuDemarre);
         if (boutonShop != null) boutonShop.setDisable(verrouiller);
         if (boutonTuto != null) boutonTuto.setDisable(verrouiller);
@@ -380,80 +417,23 @@ public class Controller implements Initializable {
         }
     }
 
+    public void mettreEnPause() {
+        if (jeuDemarre) {
+            gameLoop.stop();
+            timeline.pause();
+        }
+    }
+
+    public void reprendreJeu() {
+        if (jeuDemarre) {
+            gameLoop.start();
+            timeline.play();
+        }
+    }
+
     @FXML
     private void actionBoutonShop() {
-        if (shopActuel != null) {
-            shopActuel.cacher(conteneurPrincipal);
-            if (jeuDemarre) { gameLoop.start(); timeline.play(); }
-            shopActuel = null;
-            return;
-        }
-
-        if (jeuDemarre) { gameLoop.stop(); timeline.pause(); }
-        verrouillerInterface(true);
-
-        int vagueActu = env.getGestionnaireVagues().getNumVagueActu() + 1;
-
-        shopActuel = new ShopVue(
-                () -> {
-                    if (shopActuel != null) {
-                        shopActuel.cacher(conteneurPrincipal);
-                        shopActuel = null;
-                        verrouillerInterface(false);
-                        if (jeuDemarre) { gameLoop.start(); timeline.play(); }
-                    }
-                },
-                (typeItem) -> {
-                    if (typeItem.equals("potion_soin")) {
-                        if (env.getArgent() >= PotionSoin.prixAchat) {
-                            env.reduireArgent(PotionSoin.prixAchat);
-                            env.setNbPotionSoin(env.getNbPotionSoin() + 1);
-                        }
-                    } else if (typeItem.equals("potion_rage")) {
-                        if (env.getArgent() >= PotionRage.prixAchat) {
-                            env.reduireArgent(PotionRage.prixAchat);
-                            env.setNbPotionRage(env.getNbPotionRage() + 1);
-                        }
-                    } else if (typeItem.equals("potion_gel")) {
-                        if (env.getArgent() >= PotionGel.prixAchat) {
-                            env.reduireArgent(PotionGel.prixAchat);
-                            env.setNbPotionGel(env.getNbPotionGel() + 1);
-                        }
-                    } else {
-                        int prix = switch (typeItem) {
-                            case "scientifique" -> TourScientifique.prixAchat;
-                            case "chimiste"      -> TourChimiste.prixAchat;
-                            case "scanner"       -> TourScanner.prixAchat;
-                            case "rayon_x"       -> TourRayonX.prixAchat;
-                            default              -> 0;
-                        };
-
-                        int caseLibre = inventaireModele.getPremiereCaseLibre();
-                        if (env.getArgent() >= prix && caseLibre != -1) {
-                            env.reduireArgent(prix);
-                            updateCompteurs();
-                            inventaireModele.setTourCase(caseLibre, typeItem);
-                            inventaireVue.installerTour(caseLibre, typeItem);
-
-                            Tour nouvelleTourAchetee = creerTourDepuisType(typeItem);
-                            if (nouvelleTourAchetee != null) {
-                                env.getTourVersIndexInventaire().put(nouvelleTourAchetee, caseLibre);
-                            }
-                        }
-                    }
-
-                    if (shopActuel != null) {
-                        shopActuel.cacher(conteneurPrincipal);
-                        shopActuel = null;
-                        verrouillerInterface(false);
-                        if (jeuDemarre) { gameLoop.start(); timeline.play(); }
-                    }
-                },
-                vagueActu, env.getArgent(),
-                TourScientifique.prixAchat, TourChimiste.prixAchat, TourScanner.prixAchat, TourRayonX.prixAchat,
-                PotionSoin.prixAchat, PotionRage.prixAchat, PotionGel.prixAchat
-        );
-        shopActuel.afficherSur(conteneurPrincipal);
+        controllerShop.actionBoutonShop();
     }
 
     private void mettreAJourLabelVague() {
@@ -848,57 +828,55 @@ public class Controller implements Initializable {
         vueParametresActive.afficherSur(conteneurMenuPrincipal);
     }
 
-    @FXML
+ @FXML
     private void actionUtiliserSoin() {
-        if (env.getNbPotionSoin() > 0 && !soinEnCooldown) {
-            soinEnCooldown = true;
-            env.setNbPotionSoin(env.getNbPotionSoin() - 1);
-
-            PotionSoin soin = new PotionSoin();
-            soin.appliquerEffet(env);
-            updateCompteurs();
-
-            btnPotionSoin.setDisable(true);
-            potionVue.animerJaugeActive(btnPotionSoin, 0.5, () -> {
-                btnPotionSoin.setDisable(false);
-                soinEnCooldown = false;
-            });
-        }
+        utiliserPotion(TypePotion.SOIN, btnPotionSoin, env.getNbPotionSoin(), env::setNbPotionSoin);
     }
 
     @FXML
     private void actionUtiliserRage() {
-        if (env.getNbPotionRage() > 0 && !rageEnCooldown) {
-            rageEnCooldown = true;
-            env.setNbPotionRage(env.getNbPotionRage() - 1);
-
-            PotionRage rage = new PotionRage();
-            rage.appliquerEffet(env);
-
-            btnPotionRage.setDisable(true);
-            potionVue.animerJaugeActive(btnPotionRage, 5.0, () -> {
-                btnPotionRage.setDisable(false);
-                rageEnCooldown = false;
-            });
-        }
+        utiliserPotion(TypePotion.RAGE, btnPotionRage, env.getNbPotionRage(), env::setNbPotionRage);
     }
 
     @FXML
     private void actionUtiliserGel() {
-        if (env.getNbPotionGel() > 0 && !gelEnCooldown) {
-            gelEnCooldown = true;
-            env.setNbPotionGel(env.getNbPotionGel() - 1);
+        utiliserPotion(TypePotion.GEL, btnPotionGel, env.getNbPotionGel(), env::setNbPotionGel);
+    }
 
-            PotionGel gel = new PotionGel();
-            gel.appliquerEffet(env);
-
-            btnPotionGel.setDisable(true);
-
-            potionVue.animerJaugeActive(btnPotionGel, 3.0, () -> {
-                btnPotionGel.setDisable(false);
-                gelEnCooldown = false;
-            });
+   private void utiliserPotion(TypePotion type, Button bouton, int quantite,
+                                java.util.function.IntConsumer modifierQuantite) {
+        if (quantite <= 0 || potionsEnCooldown.getOrDefault(type, false)) {
+            return;
         }
+
+        potionsEnCooldown.put(type, true);
+        modifierQuantite.accept(quantite - 1);
+
+        Potion potion = type.creerPotion();
+        potion.appliquerEffet(env);
+        updateCompteurs();
+
+        bouton.setDisable(true);
+
+       potionVue.animerJaugeActive(bouton, 5.0, () -> {
+            bouton.setDisable(false);
+            potionsEnCooldown.put(type, false);
+        });
+    }
+
+    private void acheterPotion(TypePotion type) {
+        int prix = type.getPrix();
+        if (env.getArgent() < prix) {
+            return;
+        }
+
+        env.reduireArgent(prix);
+        switch (type) {
+            case SOIN -> env.setNbPotionSoin(env.getNbPotionSoin() + 1);
+            case RAGE -> env.setNbPotionRage(env.getNbPotionRage() + 1);
+            case GEL -> env.setNbPotionGel(env.getNbPotionGel() + 1);
+        }
+        updateCompteurs();
     }
 
     @FXML
