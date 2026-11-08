@@ -7,6 +7,9 @@ import javax.sound.sampled.FloatControl;
 import java.net.URL;
 
 public class Configuration {
+    
+    private static Configuration instanceUnique;
+
     private double volumeMusique;
     private double volumeBruitages;
     private boolean effetsVisuelsActifs;
@@ -16,7 +19,7 @@ public class Configuration {
     private final String[] pagesInfo;
     private int pageInfoCourante;
 
-    public Configuration() {
+    private Configuration() {
         this.volumeMusique = 0.5;
         this.volumeBruitages = 0.7;
         this.effetsVisuelsActifs = true;
@@ -30,6 +33,13 @@ public class Configuration {
         this.pageInfoCourante = 0;
 
         initialiserEtJouerMusique();
+    }
+
+    public static Configuration getInstance() {
+        if (instanceUnique == null) {
+            instanceUnique = new Configuration();
+        }
+        return instanceUnique;
     }
 
     private void chargerEtJouerClip(String cheminRessource) {
