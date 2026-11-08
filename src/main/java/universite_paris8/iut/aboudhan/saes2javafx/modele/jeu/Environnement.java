@@ -23,7 +23,7 @@ public class Environnement {
     private final IntegerProperty nbPotionRage = new SimpleIntegerProperty(0);
     private final IntegerProperty nbPotionGel = new SimpleIntegerProperty(0);
 
-    private final IntegerProperty argent = new SimpleIntegerProperty(50);
+    private final IntegerProperty argent = new SimpleIntegerProperty(ARGENT_INITIAL);
     private final IntegerProperty gensInfectes = new SimpleIntegerProperty(0);
 
     private final GestionnaireVagues gestionnaireVagues;
@@ -39,7 +39,7 @@ public class Environnement {
     public Environnement() {
         this.terrain = new Terrain();
         this.grille = this.terrain.grille;
-        this.tailleTuile = 34;
+        this.tailleTuile = TAILLE_TUILE;
         this.gestionnaireVagues = new GestionnaireVagues();
     }
 
@@ -87,7 +87,7 @@ public class Environnement {
     }
 
     public boolean verifierDefaite() {
-        return this.gensInfectes.get() >= 70;
+        return this.gensInfectes.get() >= SEUIL_DEFAITE;
     }
 
     public void enregistrerTourPosee(Tour tour, int caseX, int caseY, int indexInventaire) {
