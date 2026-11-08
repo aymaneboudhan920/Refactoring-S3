@@ -23,7 +23,7 @@ public class Environnement {
     private final IntegerProperty nbPotionRage = new SimpleIntegerProperty(0);
     private final IntegerProperty nbPotionGel = new SimpleIntegerProperty(0);
 
-    private final IntegerProperty argent = new SimpleIntegerProperty(50);
+    private final IntegerProperty argent = new SimpleIntegerProperty(500000);
     private final IntegerProperty gensInfectes = new SimpleIntegerProperty(0);
 
     private final GestionnaireVagues gestionnaireVagues;
