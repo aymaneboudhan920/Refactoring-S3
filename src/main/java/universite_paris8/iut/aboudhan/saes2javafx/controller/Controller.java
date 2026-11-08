@@ -115,7 +115,7 @@ public class Controller implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Platform.runLater(() -> conteneurMenuPrincipal.requestFocus());
-        this.configJeu = new Configuration();
+        this.configJeu = Configuration.getInstance();
         this.gestionnaireEffets = new GestionnaireEffets(conteneurPrincipal);
 
         TerrainVue terrainVue = new TerrainVue(env.getGrille(), env.getTailleTuile());
