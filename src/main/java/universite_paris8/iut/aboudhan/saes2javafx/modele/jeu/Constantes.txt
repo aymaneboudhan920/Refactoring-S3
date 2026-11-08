@@ -1,0 +1,9 @@
+package universite_paris8.iut.aboudhan.saes2javafx.modele.jeu;
+
+public class Constantes {
+    public static final int TAILLE_TUILE = 34;
+
+    public static final int SEUIL_DEFAITE = 70;
+
+    public static final int ARGENT_INITIAL = 50;
+}
