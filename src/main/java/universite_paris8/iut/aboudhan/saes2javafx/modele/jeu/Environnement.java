@@ -15,6 +15,18 @@ import java.util.Map;
 
 public class Environnement {
 
+    public static final int CASE_LIBRE = 0;
+    public static final int CASE_ENTREE = 2;
+    public static final int CASE_SORTIE = 3;
+    public static final int CASE_CONDUIT_ENTREE = 4;
+    public static final int CASE_CONDUIT_SORTIE = 5;
+    public static final int CASE_RALENTISSANTE = 6;
+    public static final int CASE_TOUR = 99;
+    private static final int CASE_CHEMIN_MIN = 1;
+    private static final int CASE_CHEMIN_MAX = 6;
+    private static final int ARGENT_INITIAL = 50;
+    private static final int SEUIL_DEFAITE = 70;
+
     private final Terrain terrain;
     private final int[][] grille;
     private final int tailleTuile;
@@ -23,7 +35,7 @@ public class Environnement {
     private final IntegerProperty nbPotionRage = new SimpleIntegerProperty(0);
     private final IntegerProperty nbPotionGel = new SimpleIntegerProperty(0);
 
-    private final IntegerProperty argent = new SimpleIntegerProperty(50);
+    private final IntegerProperty argent = new SimpleIntegerProperty(ARGENT_INITIAL);
     private final IntegerProperty gensInfectes = new SimpleIntegerProperty(0);
 
     private final GestionnaireVagues gestionnaireVagues;
@@ -87,20 +99,24 @@ public class Environnement {
     }
 
     public boolean verifierDefaite() {
-        return this.gensInfectes.get() >= 70;
+        return this.gensInfectes.get() >= SEUIL_DEFAITE;
     }
 
     public void enregistrerTourPosee(Tour tour, int caseX, int caseY, int indexInventaire) {
-        grille[caseY][caseX] = 99;
+        grille[caseY][caseX] = CASE_TOUR;
         tourVersCaseGrille.put(tour, new int[]{caseX, caseY});
         tourVersIndexInventaire.put(tour, indexInventaire);
         toursPosees.add(tour);
     }
 
     public void rappelerTour(Tour tour) {
+        retirerTourDuTerrain(tour);
+    }
+
+    private void retirerTourDuTerrain(Tour tour) {
         int[] caseGrille = tourVersCaseGrille.remove(tour);
         if (caseGrille != null) {
-            grille[caseGrille[1]][caseGrille[0]] = 0;
+            grille[caseGrille[1]][caseGrille[0]] = CASE_LIBRE;
         }
         toursPosees.remove(tour);
     }
@@ -121,11 +137,7 @@ public class Environnement {
         if (tour != null) {
             int gain = tour.calculerValeurVente();
             this.argent.set(this.argent.get() + gain);
-            int[] caseGrille = tourVersCaseGrille.remove(tour);
-            if (caseGrille != null) {
-                grille[caseGrille[1]][caseGrille[0]] = 0;
-            }
-            toursPosees.remove(tour);
+            retirerTourDuTerrain(tour);
             this.getTourVersIndexInventaire().remove(tour);
         }
     }
@@ -156,7 +168,7 @@ public class Environnement {
             int caseI = (int) (m.getY() / tailleTuile);
 
             if (caseI >= 0 && caseI < grille.length && caseJ >= 0 && caseJ < grille[0].length) {
-                m.appliquerRalentissement(grille[caseI][caseJ] == 6);
+                m.appliquerRalentissement(grille[caseI][caseJ] == CASE_RALENTISSANTE);
             }
             m.deplacer();
 
@@ -176,21 +188,19 @@ public class Environnement {
         this.tourVersCaseGrille.clear();
         this.microbesGeles = false;
 
-        this.argent.set(50);
+        this.argent.set(ARGENT_INITIAL);
         this.gensInfectes.set(0);
 
         this.nbPotionSoin.set(0);
         this.nbPotionRage.set(0);
         this.nbPotionGel.set(0);
 
-        this.gestionnaireVagues.listeVagues.clear();
-        this.gestionnaireVagues.numVagueActu = 0;
-        this.gestionnaireVagues.initialiserVagues(this);
+        this.gestionnaireVagues.reinitialiser(this);
 
         for (int i = 0; i < grille.length; i++) {
             for (int j = 0; j < grille[i].length; j++) {
-                if (grille[i][j] == 99) {
-                    grille[i][j] = 0;
+                if (grille[i][j] == CASE_TOUR) {
+                    grille[i][j] = CASE_LIBRE;
                 }
             }
         }
@@ -204,16 +214,16 @@ public class Environnement {
 
         for (int i = 0; i < grille.length; i++) {
             for (int j = 0; j < grille[i].length; j++) {
-                if (grille[i][j] == 2) {
+                if (grille[i][j] == CASE_ENTREE) {
                     ligneEntree = i;
                     colonneEntree = j;
-                } else if (grille[i][j] == 3) {
+                } else if (grille[i][j] == CASE_SORTIE) {
                     ligneSortie = i;
                     colonneSortie = j;
-                } else if (grille[i][j] == 4) {
+                } else if (grille[i][j] == CASE_CONDUIT_ENTREE) {
                     ligneConduit4 = i;
                     colonneConduit4 = j;
-                } else if (grille[i][j] == 5) {
+                } else if (grille[i][j] == CASE_CONDUIT_SORTIE) {
                     conduits5.add(new int[]{i, j});
                 }
             }
@@ -292,7 +302,7 @@ public class Environnement {
 
                 if (ligneVoisine >= 0 && ligneVoisine < grille.length && colonneVoisine >= 0 && colonneVoisine < grille[0].length) {
                     int typeDalle = grille[ligneVoisine][colonneVoisine];
-                    boolean estMarchable = (typeDalle >= 1 && typeDalle <= 6);
+                    boolean estMarchable = (typeDalle >= CASE_CHEMIN_MIN && typeDalle <= CASE_CHEMIN_MAX);
                     boolean estDejaExploree = casesVisitees[ligneVoisine][colonneVoisine];
 
                     if (estMarchable && !estDejaExploree) {
