@@ -43,49 +43,51 @@ public class GestionnaireTours {
         int tailleTuile = env.getTailleTuile();
         int caseX = (int) (xSurTerrain / tailleTuile);
         int caseY = (int) (ySurTerrain / tailleTuile);
-        int[][] grille = env.getGrille();
 
-        // Vérification des limites de la grille et de la disponibilité de la case
-        if (caseY >= 0 && caseY < grille.length && caseX >= 0 && caseX < grille[0].length) {
-            if (grille[caseY][caseX] == 0) {
-                return placerTour(caseX, caseY);
-            }
+        if (estCaseConstruisible(caseX, caseY)) {
+            return placerTour(caseX, caseY);
+        }
+
+        return null;
+    }
+
+    private boolean estCaseConstruisible(int caseX, int caseY) {
+        int[][] grille = env.getGrille();
+        boolean dansLesLimites = caseY >= 0 && caseY < grille.length && caseX >= 0 && caseX < grille[0].length;
+        return dansLesLimites && grille[caseY][caseX] == 0;
+    }
+
+    private Tour placerTour(int caseX, int caseY) {
+        Tour tourAPlacer = trouverTourParIndex(indexInventaireActu);
+
+        if (tourAPlacer != null) {
+            env.enregistrerTourPosee(tourAPlacer, caseX, caseY, indexInventaireActu);
+            annulerPlacement();
+        }
+        return tourAPlacer;
+    }
+
+    public Tour trouverTourPosee(int index) {
+        Tour tour = trouverTourParIndex(index);
+        if (tour != null && env.getToursPosees().contains(tour)) {
+            return tour;
         }
         return null;
     }
 
-    private Tour placerTour(int caseX, int caseY) {
-        Tour tourAPlacer = null;
-
-        for (Map.Entry<Tour, Integer> association : env.getTourVersIndexInventaire().entrySet()) {
-            if (association.getValue() == indexInventaireActu) {
-                tourAPlacer = association.getKey();
+    private Tour trouverTourParIndex(int index) {
+        for (Map.Entry<Tour, Integer> entry : env.getTourVersIndexInventaire().entrySet()) {
+            if (entry.getValue() == index) {
+                return entry.getKey();
             }
         }
-
-        if (tourAPlacer != null) {
-            env.enregistrerTourPosee(tourAPlacer, caseX, caseY, indexInventaireActu);
-
-            modePlacementTour = false;
-            tourCliquee = null;
-        }
-
-        return tourAPlacer;
+        return null;
     }
 
     public void annulerPlacement() {
         modePlacementTour = false;
         tourCliquee = null;
         indexInventaireActu = -1;
-    }
-
-    public Tour trouverTourPosee(int index) {
-        for (Map.Entry<Tour, Integer> association : env.getTourVersIndexInventaire().entrySet()) {
-            if (association.getValue() == index && env.getToursPosees().contains(association.getKey())) {
-                return association.getKey();
-            }
-        }
-        return null;
     }
 
     public void reinitialiser() {
