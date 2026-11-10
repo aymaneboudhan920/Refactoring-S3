@@ -166,21 +166,13 @@ public class Microbe {
         }
     }
 
-    public void perdreVie(double degats, Tour tour) {
+    public void perdreVie(double degats, Tour tour){
         this.pv.set(Math.max(0, this.pv.get() - degats));
-        gererEffetVIH(tour);
-        verifierEtDeclencherRage();
-    }
-
-    private void gererEffetVIH(Tour tour) {
         if (TypeMicrobe.VIH.equals(this.type) && tour != null) {
             tour.etourdir(0.1);
             this.doitAfficherEclair = true;
             this.tourAReset.add(tour);
         }
-    }
-
-    private void verifierEtDeclencherRage() {
         if (TypeMicrobe.RAGE.equals(this.type) && this.estEnrage() && !aDeclencheRage) {
             this.type = TypeMicrobe.RAGE_ENRAGE;
             this.vitesseDeBase = 2.0;
