@@ -11,31 +11,35 @@ public class TourChimiste extends Tour {
 
     public TourChimiste(double x, double y) {
         super(x, y, PORTEE, 15, 0.33, prixAchat,
-                "/universite_paris8/iut/aboudhan/saes2javafx/vue/tour_chimiste.png");
+                "/universite_paris8/iut/aboudhan/saes2javafx/vue/tour_chimiste.png", new AttaqueProjectile());
     }
 
-    @Override
-    public void attaquer(Environnement env) {
-        List<Microbe> microbesActifs = env.getMicrobesActifs();
-        Microbe cible = null;
+//    @Override
+//    public void attaquer(Environnement env) {
+//        List<Microbe> microbesActifs = env.getMicrobesActifs();
+//        Microbe cible = null;
+//
+//        for (int i = 0; i < microbesActifs.size() && cible == null; i++) {
+//            Microbe m = microbesActifs.get(i);
+//            if (!m.estMort() && !"INFLUENZA".equals(m.getType())) {
+//                double diffX = m.getX() - this.getX();
+//                double diffY = m.getY() - this.getY();
+//                double distance = Math.sqrt(diffX * diffX + diffY * diffY);
+//
+//                if (distance <= this.getPortee()) {
+//                    cible = m;
+//                }
+//            }
+//        }
+//
+//        if (cible != null && peutAttaquer()) {
+////            Projectile potion = new Projectile(this.getX(), this.getY(), 5.0, cible, "CHIMISTE", this.getDegats(), this);
+//            env.ajouterProjectile(initProjectile(cible, 5.0));
+//            this.recharger();
+//        }
+//    }
 
-        for (int i = 0; i < microbesActifs.size() && cible == null; i++) {
-            Microbe m = microbesActifs.get(i);
-            if (!m.estMort() && !"INFLUENZA".equals(m.getType())) {
-                double diffX = m.getX() - this.getX();
-                double diffY = m.getY() - this.getY();
-                double distance = Math.sqrt(diffX * diffX + diffY * diffY);
-
-                if (distance <= this.getPortee()) {
-                    cible = m;
-                }
-            }
-        }
-
-        if (cible != null && peutAttaquer()) {
-            Projectile potion = new Projectile(this.getX(), this.getY(), 5.0, cible, "CHIMISTE", this.getDegats(), this);
-            env.ajouterProjectile(potion);
-            this.recharger();
-        }
-    }
+//    public void reinitialiserAttaque(){
+//
+//    }
 }

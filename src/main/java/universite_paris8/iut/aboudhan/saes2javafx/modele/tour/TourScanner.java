@@ -12,7 +12,7 @@ public class TourScanner extends Tour {
 
     public TourScanner(double x, double y) {
         super(x, y, 102, 10, 0.8, prixAchat,
-                "/universite_paris8/iut/aboudhan/saes2javafx/vue/tour_scanner.png");
+                "/universite_paris8/iut/aboudhan/saes2javafx/vue/tour_scanner.png", new AttaqueScanner());
         this.vitesseExtension = this.getPortee() * this.getVitesseTir();
     }
 
@@ -49,6 +49,11 @@ public class TourScanner extends Tour {
     }
 
     @Override
+    public void etourdir(double duree) {
+        super.etourdir(duree);
+        this.reinitialiserAttaque();
+    }
+
     public void reinitialiserAttaque() {
         this.rayonAnimationActuel = 0;
     }

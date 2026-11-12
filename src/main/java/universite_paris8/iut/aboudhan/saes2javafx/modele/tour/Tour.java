@@ -1,6 +1,7 @@
 package universite_paris8.iut.aboudhan.saes2javafx.modele.tour;
 
 import universite_paris8.iut.aboudhan.saes2javafx.modele.jeu.Environnement;
+import universite_paris8.iut.aboudhan.saes2javafx.modele.microbe.Microbe;
 
 public abstract class Tour {
     private double x, y, degats, vitesseTir;
@@ -10,8 +11,9 @@ public abstract class Tour {
     private double tempsRechargeRestant = 0.0;
     private double multiplicateurVitesse = 1.0;
     private double tempsEtourdissementRestant = 0;
+    private StratAttaque stratAttaque;
 
-    public Tour(double x, double y, int portee, double degats, double vitesseTir, int prix, String nomImage) {
+    public Tour(double x, double y, int portee, double degats, double vitesseTir, int prix, String nomImage, StratAttaque stratAttaque) {
         this.x = x;
         this.y = y;
         this.portee = portee;
@@ -20,9 +22,12 @@ public abstract class Tour {
         this.prix = prix;
         this.nomImage = nomImage;
         this.niveau = 1;
+        this.stratAttaque = stratAttaque;
     }
 
-    public abstract void attaquer(Environnement env);
+    public void attaquer(Environnement env){
+        this.stratAttaque.attaquer(env, this);
+    }
 
     public double getX() { return x; }
     public double getY() { return y; }
@@ -59,7 +64,7 @@ public abstract class Tour {
 
     public void etourdir(double duree) {
         this.tempsEtourdissementRestant = duree;
-        this.reinitialiserAttaque();
+//        this.reinitialiserAttaque();
     }
 
     public boolean peutAttaquer() {
@@ -88,5 +93,9 @@ public abstract class Tour {
         this.vitesseTir = this.vitesseTir * 1.1;
     }
 
-    public void reinitialiserAttaque() {}
+//    public abstract void reinitialiserAttaque();
+
+    public Projectile initProjectile (Microbe cible, double vitess){
+        return new Projectile(this.getX(), this.getY(), vitess, cible, "CHIMISTE", this.getDegats(), this);
+    }
 }

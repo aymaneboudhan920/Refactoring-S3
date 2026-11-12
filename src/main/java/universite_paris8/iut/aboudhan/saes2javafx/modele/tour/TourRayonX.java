@@ -17,7 +17,7 @@ public class TourRayonX extends Tour {
 
     public TourRayonX(double x, double y) {
         super(x, y, 102, 2, 10, prixAchat,
-                "/universite_paris8/iut/aboudhan/saes2javafx/vue/tour_rayon_x.png");
+                "/universite_paris8/iut/aboudhan/saes2javafx/vue/tour_rayon_x.png", new AttaqueRayonX());
     }
 
     @Override
@@ -62,6 +62,11 @@ public class TourRayonX extends Tour {
     }
 
     @Override
+    public void etourdir(double duree) {
+        super.etourdir(duree);
+        this.reinitialiserAttaque();
+    }
+
     public void reinitialiserAttaque() {
         this.degatsActuels = DEGATS_MIN;
         this.cibleActuelle = null;
