@@ -25,9 +25,31 @@ public abstract class Tour {
         this.stratAttaque = stratAttaque;
     }
 
-    public void attaquer(Environnement env){
+    public void attaquer(Environnement env) {
         this.stratAttaque.attaquer(env, this);
     }
+
+    public void mettreAJourRecharge(double t) {
+        if (this.estEtourdie()) {
+            tempsEtourdissementRestant -= t;
+        } else if (this.tempsRechargeRestant > 0) {
+            this.tempsRechargeRestant = Math.max(0, this.tempsRechargeRestant - t);
+        }
+        this.stratAttaque.mettreAJour(this, t);
+    }
+
+    public void etourdir(double duree) {
+        this.tempsEtourdissementRestant = duree;
+        this.stratAttaque.reinitialiser();
+    }
+
+    public boolean estAPortee(Microbe m) {
+        double dx = m.getX() - x;
+        double dy = m.getY() - y;
+        return Math.sqrt(dx * dx + dy * dy) <= portee;
+    }
+
+    protected StratAttaque getStratAttaque() { return stratAttaque; }
 
     public double getX() { return x; }
     public double getY() { return y; }
@@ -48,24 +70,6 @@ public abstract class Tour {
     public void incrementerNiveau() { this.niveau++; }
 
     public void setMultiplicateurVitesse(double coeff) { this.multiplicateurVitesse = coeff; }
-
-    public void mettreAJourRecharge(double t) {
-        if (this.estEtourdie()) {
-            tempsEtourdissementRestant -= t;
-            return;
-        }
-        if (this.tempsRechargeRestant > 0) {
-            this.tempsRechargeRestant -= t;
-            if (this.tempsRechargeRestant < 0) {
-                this.tempsRechargeRestant = 0;
-            }
-        }
-    }
-
-    public void etourdir(double duree) {
-        this.tempsEtourdissementRestant = duree;
-//        this.reinitialiserAttaque();
-    }
 
     public boolean peutAttaquer() {
         return this.tempsRechargeRestant <= 0 && this.tempsEtourdissementRestant <= 0;
@@ -93,9 +97,7 @@ public abstract class Tour {
         this.vitesseTir = this.vitesseTir * 1.1;
     }
 
-//    public abstract void reinitialiserAttaque();
-
-    public Projectile initProjectile (Microbe cible, double vitess){
-        return new Projectile(this.getX(), this.getY(), vitess, cible, "CHIMISTE", this.getDegats(), this);
+    public Projectile initProjectile(Microbe cible, double vitesse, String type) {
+        return new Projectile(x, y, vitesse, cible, type, degats, this);
     }
 }
