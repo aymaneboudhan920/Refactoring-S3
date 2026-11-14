@@ -18,8 +18,8 @@ public class Microbe {
     public double pvMax;
     private final int recompense;
     public int infection;
-    private Waypoint waypointCible;
-    private String type;
+    public Waypoint waypointCible;
+    private TypeMicrobe type;
     private boolean estGele = false;
     private boolean estRalenti = false;
     private boolean aDeclencheRage = false;
@@ -31,7 +31,7 @@ public class Microbe {
     private double tempsProchainSommeil;
     private int etatVaricelle = 0;
 
-    public Microbe(double v, double pm, int r, int i, String type, Waypoint waypointDepart){
+    public Microbe(double v, double pm, int r, int i, TypeMicrobe type, Waypoint waypointDepart){
         this.vitesseDeBase = v;
         this.vitesseActu = v;
         this.pv.set(pm);
@@ -40,7 +40,7 @@ public class Microbe {
         this.infection = i;
         this.type = type;
 
-        if ("VARICELLE".equals(this.type)) {
+        if (TypeMicrobe.VARICELLE.equals(this.type)) {
             this.tempsProchainSommeil = 2 + (random.nextDouble() * 3);
         }
 
@@ -56,7 +56,7 @@ public class Microbe {
     }
 
     public void deplacer(){
-        if ("VARICELLE".equals(this.type)) {
+        if (TypeMicrobe.VARICELLE.equals(this.type)) {
             mettreAJourComportementVaricelle(0.012);
         }
         if (this.estGele || this.vitesseActu == 0 || this.waypointCible == null) return;
@@ -87,7 +87,7 @@ public class Microbe {
     }
 
     private void mettreAJourComportementVaricelle(double tps) {
-        if (!"VARICELLE".equals(this.type) || this.estGele) return;
+        if (!TypeMicrobe.VARICELLE.equals(this.type) || this.estGele) return;
 
         chronoCycle += tps;
 
@@ -140,7 +140,7 @@ public class Microbe {
     public int getInfection() { return infection; }
     public DoubleProperty xProperty() { return this.x; }
     public DoubleProperty yProperty() { return this.y; }
-    public String getType() { return this.type; }
+    public TypeMicrobe getType() { return this.type; }
     public Waypoint getWaypointCible() { return this.waypointCible; }
     public double getVitesseActu() { return vitesseActu; }
 
@@ -157,7 +157,7 @@ public class Microbe {
 
     public void reinitialiserVitesse() {
         this.estGele = false;
-        if ("VARICELLE".equals(this.type)) {
+        if (TypeMicrobe.VARICELLE.equals(this.type)) {
             if (this.etatVaricelle == 2) this.vitesseActu = 2.0;
             else if (this.etatVaricelle == 1) this.vitesseActu = 0;
             else this.vitesseActu = this.vitesseDeBase;
@@ -168,13 +168,13 @@ public class Microbe {
 
     public void perdreVie(double degats, Tour tour){
         this.pv.set(Math.max(0, this.pv.get() - degats));
-        if ("VIH".equals(this.type) && tour != null) {
+        if (TypeMicrobe.VIH.equals(this.type) && tour != null) {
             tour.etourdir(0.1);
             this.doitAfficherEclair = true;
             this.tourAReset.add(tour);
         }
-        if ("RAGE".equals(this.type) && this.estEnrage() && !aDeclencheRage) {
-            this.type = "RAGE_ENRAGE";
+        if (TypeMicrobe.RAGE.equals(this.type) && this.estEnrage() && !aDeclencheRage) {
+            this.type = TypeMicrobe.RAGE_ENRAGE;
             this.vitesseDeBase = 2.0;
             this.vitesseActu = 2.0;
             this.aDeclencheRage = true;

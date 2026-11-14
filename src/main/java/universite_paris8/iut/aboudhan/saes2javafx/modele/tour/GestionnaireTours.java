@@ -8,15 +8,17 @@ public class GestionnaireTours {
     private final Environnement env;
 
     private boolean modePlacementTour = false;
-    private String tourCliquee = "";
+    private TypeTour tourCliquee = null;
     private int indexInventaireActu = -1;
 
     public GestionnaireTours(Environnement env) {
         this.env = env;
     }
 
-    public boolean gererClicInventaire(int index, String typeTour) {
-        if (typeTour == null || typeTour.isEmpty()) {
+    public boolean gererClicInventaire(int index, String typeTourStr) {
+        TypeTour typeTour = TypeTour.depuisIdentifiant(typeTourStr);
+
+        if (typeTour == null) {
             return false;
         }
 
@@ -34,7 +36,7 @@ public class GestionnaireTours {
     }
 
     public Tour gererClicTerrain(double xSurTerrain, double ySurTerrain) {
-        if (!modePlacementTour || tourCliquee.isEmpty()) {
+        if (!modePlacementTour || tourCliquee == null) {
             return null;
         }
 
@@ -65,7 +67,7 @@ public class GestionnaireTours {
             env.enregistrerTourPosee(tourAPlacer, caseX, caseY, indexInventaireActu);
 
             modePlacementTour = false;
-            tourCliquee = "";
+            tourCliquee = null;
         }
 
         return tourAPlacer;
@@ -73,7 +75,7 @@ public class GestionnaireTours {
 
     public void annulerPlacement() {
         modePlacementTour = false;
-        tourCliquee = "";
+        tourCliquee = null;
         indexInventaireActu = -1;
     }
 
@@ -88,7 +90,7 @@ public class GestionnaireTours {
 
     public void reinitialiser() {
         this.modePlacementTour = false;
-        this.tourCliquee = "";
+        this.tourCliquee = null;
         this.indexInventaireActu = -1;
     }
 

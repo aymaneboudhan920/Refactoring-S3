@@ -20,8 +20,12 @@ import javafx.util.Duration;
 import universite_paris8.iut.aboudhan.saes2javafx.modele.jeu.Configuration;
 import universite_paris8.iut.aboudhan.saes2javafx.modele.jeu.Environnement;
 import universite_paris8.iut.aboudhan.saes2javafx.modele.microbe.Microbe;
+import universite_paris8.iut.aboudhan.saes2javafx.modele.microbe.TypeMicrobe;
 import universite_paris8.iut.aboudhan.saes2javafx.modele.microbe.Vague;
 import universite_paris8.iut.aboudhan.saes2javafx.modele.potion.*;
+import universite_paris8.iut.aboudhan.saes2javafx.modele.potion.PotionGel;
+import universite_paris8.iut.aboudhan.saes2javafx.modele.potion.PotionRage;
+import universite_paris8.iut.aboudhan.saes2javafx.modele.potion.PotionSoin;
 import universite_paris8.iut.aboudhan.saes2javafx.modele.tour.*;
 import universite_paris8.iut.aboudhan.saes2javafx.vue.bouton.*;
 import universite_paris8.iut.aboudhan.saes2javafx.vue.ecran.DefaiteVue;
@@ -348,8 +352,8 @@ public class Controller implements Initializable {
                 unMicrobeEstMort = true;
             }
             MicrobeVue imageVue = vuesMicrobes.get(m);
-            if (imageVue != null && m.getType().equals("RAGE_ENRAGE")) {
-                imageVue.changerImage("RAGE_ENRAGE");
+            if (imageVue != null && TypeMicrobe.RAGE_ENRAGE.equals(m.getType())) {
+                imageVue.changerImage(TypeMicrobe.RAGE_ENRAGE);
             }
             if (m.getType().equals("VIH") && m.doitAfficherEclair()) {
                 for (int i = 0; i < m.getTourAReset().size(); i++) {
