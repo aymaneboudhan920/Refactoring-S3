@@ -40,13 +40,17 @@ public abstract class Tour {
 
     public void etourdir(double duree) {
         this.tempsEtourdissementRestant = duree;
-        this.stratAttaque.reinitialiser();
+        this.reinitialiserAttaque();
     }
 
     public boolean estAPortee(Microbe m) {
         double dx = m.getX() - x;
         double dy = m.getY() - y;
         return Math.sqrt(dx * dx + dy * dy) <= portee;
+    }
+
+    public void reinitialiserAttaque() {
+        this.stratAttaque.reinitialiser();
     }
 
     protected StratAttaque getStratAttaque() { return stratAttaque; }
