@@ -1,4 +1,3 @@
-
 package universite_paris8.iut.aboudhan.saes2javafx.controller;
 
 import javafx.scene.layout.Pane;
@@ -17,8 +16,8 @@ public class ControllerShop {
 
     private ShopVue shopActuel;
 
-    public ControllerShop(Environnement env, Pane conteneurPrincipal, Controller controllerPrincipal, ControllerPotion potionController, ControllerTour tourController) {
-
+    public ControllerShop(Environnement env, Pane conteneurPrincipal, Controller controllerPrincipal,
+                          ControllerPotion potionController, ControllerTour tourController) {
         this.env = env;
         this.conteneurPrincipal = conteneurPrincipal;
         this.controllerPrincipal = controllerPrincipal;
@@ -35,8 +34,7 @@ public class ControllerShop {
         controllerPrincipal.mettreEnPause();
         controllerPrincipal.verrouillerInterface(true);
 
-        int vagueActu =
-                env.getGestionnaireVagues().getNumVagueActu() + 1;
+        int vagueActu = env.getGestionnaireVagues().getNumVagueActu() + 1;
 
         shopActuel = new ShopVue(() -> fermerShop(),
                 typeItem -> traiterAchat(typeItem),
@@ -59,18 +57,13 @@ public class ControllerShop {
         } else {
             tourController.acheterTour(typeItem);
         }
-
         fermerShop();
     }
 
     public void fermerShop() {
-        if (shopActuel == null) {
-            return;
-        }
-
+        if (shopActuel == null) return;
         shopActuel.cacher(conteneurPrincipal);
         shopActuel = null;
-
         controllerPrincipal.verrouillerInterface(false);
         controllerPrincipal.reprendreJeu();
     }

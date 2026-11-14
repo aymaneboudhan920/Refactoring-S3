@@ -9,34 +9,7 @@ public class TourScientifique extends Tour {
     public static int prixAchat = 25;
 
     public TourScientifique(double x, double y) {
-        super(x, y, 136, 10, 1.0, prixAchat,
-                "/universite_paris8/iut/aboudhan/saes2javafx/vue/tour_scientifique.png");
-    }
-
-    @Override
-    public void attaquer(Environnement env) {
-        List<Microbe> microbesActifs = env.getMicrobesActifs();
-        Microbe cible = null;
-
-        for (int i = 0; i < microbesActifs.size() && cible == null; i++) {
-            Microbe m = microbesActifs.get(i);
-
-            if (!m.estMort() && !m.getType().equals("INFLUENZA")) {
-                double diffX = m.getX() - this.getX();
-                double diffY = m.getY() - this.getY();
-                double distance = Math.sqrt(diffX * diffX + diffY * diffY);
-
-                if (distance <= this.getPortee()) {
-                    cible = m;
-                }
-            }
-        }
-
-        if (cible != null && peutAttaquer()) {
-            Projectile p = new Projectile(this.getX(), this.getY(), 8.0, cible, "SCIENTIFIQUE", this.getDegats(), this);
-            env.ajouterProjectile(p);
-
-            recharger();
-        }
+        super(x, y, 136, 10, 1.0, prixAchat, "/.../tour_scientifique.png",
+                new AttaqueProjectile(8.0, "SCIENTIFIQUE"));
     }
 }
