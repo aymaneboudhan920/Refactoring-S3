@@ -13,7 +13,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static universite_paris8.iut.aboudhan.saes2javafx.modele.jeu.Constantes.*;
+
 public class Environnement {
+
+    private static Environnement instance;
 
     private final Terrain terrain;
     private final int[][] grille;
@@ -41,6 +45,13 @@ public class Environnement {
         this.grille = this.terrain.grille;
         this.tailleTuile = TAILLE_TUILE;
         this.gestionnaireVagues = new GestionnaireVagues();
+    }
+
+    public static Environnement getInstance() {
+        if (instance == null) {
+            instance = new Environnement();
+        }
+        return instance;
     }
 
     public int getArgent() { return this.argent.get(); }
