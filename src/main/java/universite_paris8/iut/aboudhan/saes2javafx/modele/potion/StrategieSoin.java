@@ -2,7 +2,7 @@ package universite_paris8.iut.aboudhan.saes2javafx.modele.potion;
 
 import universite_paris8.iut.aboudhan.saes2javafx.modele.jeu.Environnement;
 
-public class StrategieSoin implements EffetPotionStrategy {
+public class StrategieSoin implements EffetPotionStrategie {
     private static final int NB_SOIGNEE = 10;
 
     @Override
