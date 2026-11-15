@@ -8,6 +8,8 @@ import universite_paris8.iut.aboudhan.saes2javafx.modele.tour.Projectile;
 import universite_paris8.iut.aboudhan.saes2javafx.modele.tour.Tour;
 import universite_paris8.iut.aboudhan.saes2javafx.modele.jeu.Waypoint;
 
+import static universite_paris8.iut.aboudhan.saes2javafx.modele.jeu.Constantes.*;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
