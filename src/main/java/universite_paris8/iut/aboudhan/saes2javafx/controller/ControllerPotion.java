@@ -31,11 +31,11 @@ public class ControllerPotion {
     }
 
     public boolean acheterPotion(String typeItem) {
-        int prix = prixDe(typeItem);
-        if (prix < 0 || env.getArgent() < prix) return false;
+        TypePotion type = TypePotion.depuisIdentifiant(typeItem);
+        if (type == null || env.getArgent() < type.getPrix()) return false;
 
-        env.reduireArgent(prix);
-        switch (typeItem) {
+        env.reduireArgent(type.getPrix());
+        switch (type) {
             case "potion_soin" -> env.setNbPotionSoin(env.getNbPotionSoin() + 1);
             case "potion_rage" -> env.setNbPotionRage(env.getNbPotionRage() + 1);
             case "potion_gel"  -> env.setNbPotionGel(env.getNbPotionGel() + 1);
@@ -44,14 +44,6 @@ public class ControllerPotion {
         return true;
     }
 
-    private int prixDe(String typeItem) {
-        return switch (typeItem) {
-            case "potion_soin" -> PotionSoin.prixAchat;
-            case "potion_rage" -> PotionRage.prixAchat;
-            case "potion_gel"  -> PotionGel.prixAchat;
-            default -> -1;
-        };
-    }
 
     public void utiliserSoin() { utiliser(TypePotion.SOIN, btnSoin, env.getNbPotionSoin(), env::setNbPotionSoin); }
     public void utiliserRage() { utiliser(TypePotion.RAGE, btnRage, env.getNbPotionRage(), env::setNbPotionRage); }

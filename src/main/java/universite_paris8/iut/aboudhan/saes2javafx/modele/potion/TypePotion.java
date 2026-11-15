@@ -1,12 +1,15 @@
 package universite_paris8.iut.aboudhan.saes2javafx.modele.potion;
 
+import java.util.function.Supplier;
+
 public enum TypePotion {
-    SOIN("potion_soin", PotionSoin.prixAchat),
-    RAGE("potion_rage", PotionRage.prixAchat),
-    GEL("potion_gel", PotionGel.prixAchat);
+    SOIN("potion_soin", PotionSoin.prixAchat, PotionSoin::new),
+    RAGE("potion_rage", PotionRage.prixAchat, PotionRage::new),
+    GEL("potion_gel", PotionGel.prixAchat, PotionGel::new);
 
     private final String identifiant;
     private final int prix;
+    private final Supplier<Potion> fabrique;
 
     TypePotion(String identifiant, int prix) {
         this.identifiant = identifiant;
@@ -24,11 +27,7 @@ public enum TypePotion {
     }
 
     public Potion creerPotion() {
-        return switch (this) {
-            case SOIN -> new PotionSoin();
-            case RAGE -> new PotionRage();
-            case GEL -> new PotionGel();
-        };
+        return fabrique.get();
     }
 
 }
