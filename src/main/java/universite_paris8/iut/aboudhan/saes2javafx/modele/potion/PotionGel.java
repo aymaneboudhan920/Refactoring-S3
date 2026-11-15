@@ -4,6 +4,6 @@ public class PotionGel extends Potion {
     public static final int prixAchat = 75;
 
     public PotionGel() {
-        super("Potion de Gel", prixAchat, new GelStrategy());
+        super("Potion de Gel", prixAchat, new StrategieGel());
     }
 }
