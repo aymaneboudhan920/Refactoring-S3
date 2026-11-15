@@ -5,7 +5,7 @@ import javafx.util.Duration;
 import universite_paris8.iut.aboudhan.saes2javafx.modele.jeu.Environnement;
 import universite_paris8.iut.aboudhan.saes2javafx.modele.tour.Tour;
 
-public class StrategieRage implements EffetPotionStrategy {
+public class StrategieRage implements EffetPotionStrategie {
     @Override
     public void appliquerEffet(Environnement env) {
         for (Tour tour : env.getToursPosees()) {
