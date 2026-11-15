@@ -10,6 +10,8 @@ import java.util.Random;
 import static javafx.collections.FXCollections.observableArrayList;
 
 public class GestionnaireVagues {
+    private static final int BONUS_ARGENT_PAR_VAGUE = 12;
+
     public final List<Vague> listeVagues;
     public int numVagueActu;
     private final ObservableList<Microbe> listeMicrobes = observableArrayList();
@@ -49,8 +51,13 @@ public class GestionnaireVagues {
         listeVagues.add(creerVague(env, 1.0, 30, 4, 10, 10));
     }
 
+    public void reinitialiser(Environnement env) {
+        this.numVagueActu = 0;
+        initialiserVagues(env);
+    }
+
     private Vague creerVague(Environnement env, double intervalle, int nbMicrobes, int indexMin, int indexMax, int numVague) {
-        int bonusArgent = 12 * numVague;
+        int bonusArgent = BONUS_ARGENT_PAR_VAGUE * numVague;
         Vague vague = new Vague(intervalle, bonusArgent);
 
         for (int i = 0; i < nbMicrobes; i++) {

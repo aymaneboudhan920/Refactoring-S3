@@ -18,6 +18,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import universite_paris8.iut.aboudhan.saes2javafx.modele.jeu.Environnement;
+import universite_paris8.iut.aboudhan.saes2javafx.modele.tour.Inventaire;
 import universite_paris8.iut.aboudhan.saes2javafx.modele.tour.*;
 import universite_paris8.iut.aboudhan.saes2javafx.vue.tour.InventaireVue;
 import universite_paris8.iut.aboudhan.saes2javafx.vue.tour.PanneauActionVue;
@@ -28,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ControllerTour {
+public class ControllerTour extends ControllerAchat {
 
     public static final int NB_CASES_INVENTAIRE = 8;
 
@@ -35,6 +37,8 @@ public class ControllerTour {
     private final Pane conteneurPrincipal;
     private final TilePane grilleJeu;
     private final GridPane grilleInventaire;
+    private final Inventaire inventaireModele;
+    private final InventaireVue inventaireVue;
     private final Controller controllerPrincipal;
 
     public Inventaire inventaireModele;
@@ -43,6 +47,7 @@ public class ControllerTour {
     public final List<Button> boutonsInventaire = new ArrayList<>();
     private final List<ImageView> imagesInventaire = new ArrayList<>();
     private final List<Label> labelsInventaire = new ArrayList<>();
+    public ControllerTour(Environnement env, Inventaire inventaireModele, InventaireVue inventaireVue, Controller controllerPrincipal) {
 
     private PanneauActionVue panneauActionTour;
     private Tour tourEnInspection = null;
@@ -56,6 +61,9 @@ public class ControllerTour {
         this.conteneurPrincipal = conteneurPrincipal;
         this.grilleJeu = grilleJeu;
         this.grilleInventaire = grilleInventaire;
+        super(env);
+        this.inventaireModele = inventaireModele;
+        this.inventaireVue = inventaireVue;
         this.controllerPrincipal = controllerPrincipal;
     }
 
@@ -211,7 +219,32 @@ public class ControllerTour {
     public boolean acheterTour(String typeItem) {
         int prix = prixDe(typeItem);
         if (prix < 0 || env.getArgent() < prix) return false;
+        return acheter(typeItem);
+    }
 
+    @Override
+    protected int getPrix(String typeItem) {
+        switch (typeItem) {
+            case "scientifique":
+                return TourScientifique.prixAchat;
+            case "chimiste":
+                return TourChimiste.prixAchat;
+            case "scanner":
+                return TourScanner.prixAchat;
+            case "rayon_x":
+                return TourRayonX.prixAchat;
+            default:
+                return -1;
+        }
+    }
+
+    @Override
+    protected boolean peutAcheter(String typeItem) {
+        return inventaireModele.getPremiereCaseLibre() != -1;
+    }
+
+    @Override
+    protected void appliquerAchat(String typeItem) {
         int caseLibre = inventaireModele.getPremiereCaseLibre();
         if (caseLibre == -1) return false;
 
@@ -375,6 +408,17 @@ public class ControllerTour {
                 String typeTour = inventaireModele.getTourCase(i);
                 boutonsInventaire.get(i).setDisable(typeTour == null);
             }
+        switch (typeItem) {
+            case "scientifique":
+                return new TourScientifique(0, 0);
+            case "chimiste":
+                return new TourChimiste(0, 0);
+            case "scanner":
+                return new TourScanner(0, 0);
+            case "rayon_x":
+                return new TourRayonX(0, 0);
+            default:
+                return null;
         }
     }
 }

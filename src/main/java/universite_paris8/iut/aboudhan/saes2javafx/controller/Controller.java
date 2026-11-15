@@ -26,6 +26,7 @@ import universite_paris8.iut.aboudhan.saes2javafx.modele.potion.*;
 import universite_paris8.iut.aboudhan.saes2javafx.modele.potion.PotionGel;
 import universite_paris8.iut.aboudhan.saes2javafx.modele.potion.PotionRage;
 import universite_paris8.iut.aboudhan.saes2javafx.modele.potion.PotionSoin;
+import universite_paris8.iut.aboudhan.saes2javafx.modele.potion.*;
 import universite_paris8.iut.aboudhan.saes2javafx.modele.tour.*;
 import universite_paris8.iut.aboudhan.saes2javafx.vue.bouton.*;
 import universite_paris8.iut.aboudhan.saes2javafx.vue.ecran.DefaiteVue;
@@ -90,6 +91,9 @@ public class Controller implements Initializable {
     private ControllerShop controllerShop;
     private ControllerPotion controllerPotion;
     private ControllerTour controllerTour;
+    private final Map<TypePotion, Boolean> potionsEnCooldown = new EnumMap<>(TypePotion.class);
+
+    private ControllerShop controllerShop;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -118,6 +122,10 @@ public class Controller implements Initializable {
 
         pageAccueil.setVisible(true);
         conteneurJeu.setVisible(false);
+
+        ControllerPotion controllerPotion = new ControllerPotion(env);
+        ControllerTour controllerTour = new ControllerTour(env, inventaireModele, inventaireVue, this);
+        controllerShop = new ControllerShop(env, conteneurPrincipal, this,controllerPotion, controllerTour);
     }
 
     private void configurerBindings() {
@@ -126,6 +134,205 @@ public class Controller implements Initializable {
         labelPotionSoin.textProperty().bind(env.nbPotionSoinProperty().asString());
         labelPotionRage.textProperty().bind(env.nbPotionRageProperty().asString());
         labelPotionGel.textProperty().bind(env.nbPotionGelProperty().asString());
+    }
+
+    public void verrouillerInterface(boolean verrouiller) {
+    private void rassemblerListesInventaire() {
+        for (int i = 0; i < NB_CASES_INVENTAIRE; i++) {
+            ImageView image = new ImageView();
+            image.setFitHeight(50);
+            image.setFitWidth(50);
+            image.setPickOnBounds(true);
+            image.setPreserveRatio(true);
+            VBox.setMargin(image, new Insets(5));
+
+            Label label = new Label("VIDE");
+            label.getStyleClass().add("vague");
+            label.setAlignment(Pos.CENTER);
+            label.setContentDisplay(ContentDisplay.CENTER);
+            label.setTextAlignment(TextAlignment.CENTER);
+            label.setTextFill(Color.WHITE);
+            label.setFont(new Font("Impact", 15));
+
+            VBox contenuCase = new VBox(image, label);
+            contenuCase.setAlignment(Pos.BOTTOM_CENTER);
+
+            Button caseInventaire = new Button();
+            caseInventaire.setMnemonicParsing(false);
+            caseInventaire.getStyleClass().add("btn-inventaire-tour");
+            caseInventaire.setGraphic(contenuCase);
+
+            grilleInventaire.add(caseInventaire, i, 0);
+            GridPane.setHalignment(caseInventaire, HPos.CENTER);
+            GridPane.setValignment(caseInventaire, VPos.CENTER);
+
+            boutonsInventaire.add(caseInventaire);
+            imagesInventaire.add(image);
+            labelsInventaire.add(label);
+        }
+    }
+
+    private void configurerPanneauAction() {
+        this.panneauActionTour = new PanneauActionVue();
+        this.panneauActionTour.setVisible(false);
+        conteneurPrincipal.getChildren().add(panneauActionTour);
+
+        this.panneauActionTour.getBtnAmeliorer().setOnAction(e -> gererAmelioration());
+        this.panneauActionTour.getBtnRanger().setOnAction(e -> {
+            if (this.panneauActionTour.getBtnRanger().getText().equals("Ranger")) {
+                gererRappel();
+            } else if (this.panneauActionTour.getBtnRanger().getText().equals("Poser") && this.indexTourInspectee != -1) {
+                String typeTour = inventaireModele.getTourCase(this.indexTourInspectee);
+                gestionnaireTours.gererClicInventaire(this.indexTourInspectee, typeTour);
+                this.panneauActionTour.setVisible(false);
+            }
+        });
+        this.panneauActionTour.getBtnVendre().setOnAction(e -> gererVente());
+        this.panneauActionTour.getBtnFermer().setOnAction(e -> masquerPanneau());
+    }
+
+    private void configurerEvenementsInventaire() {
+        for (int i = 0; i < boutonsInventaire.size(); i++) {
+            final int indexActuel = i;
+            Button btn = boutonsInventaire.get(i);
+            btn.setDisable(true);
+
+            btn.setOnMouseClicked(event -> {
+                if (event.getButton() == MouseButton.PRIMARY) {
+                    if (this.indexTourInspectee == indexActuel) {
+                        masquerPanneau();
+                        return;
+                    }
+
+                    String typeTour = inventaireModele.getTourCase(indexActuel);
+                    boolean estUneTourExistante = gestionnaireTours.gererClicInventaire(indexActuel, typeTour);
+
+                    for (Map.Entry<Tour, Integer> entree : env.getTourVersIndexInventaire().entrySet()) {
+                        if (entree.getValue() == indexActuel) {
+                            this.tourEnInspection = entree.getKey();
+                        }
+                    }
+
+                    if (!estUneTourExistante) {
+                        gestionnaireTours.annulerPlacement();
+                        if (this.tourEnInspection == null && typeTour != null && !typeTour.isEmpty()) {
+                            this.tourEnInspection = creerTourDepuisType(typeTour);
+                            if (this.tourEnInspection != null) {
+                                env.getTourVersIndexInventaire().put(this.tourEnInspection, indexActuel);
+                            }
+                        }
+                    }
+
+                    if (this.tourEnInspection != null) {
+                        this.indexTourInspectee = indexActuel;
+                        afficherEtPositionnerPanneauAction(btn, estUneTourExistante);
+                    }
+                }
+            });
+        }
+    }
+
+    private void afficherEtPositionnerPanneauAction(Button btn, boolean estUneTourExistante) {
+        Point2D coordsScene = btn.localToScene(0, 0);
+        Point2D coordsConteneur = conteneurPrincipal.sceneToLocal(coordsScene);
+
+        double caseCenterX = coordsConteneur.getX() + (btn.getWidth() / 2);
+        double posY = coordsConteneur.getY();
+
+        this.panneauActionTour.actualiser(this.tourEnInspection, estUneTourExistante, env.getArgent());
+        this.panneauActionTour.applyCss();
+        this.panneauActionTour.layout();
+
+        double largeurInitiale = this.panneauActionTour.getBoundsInLocal().getWidth();
+        double hauteurInitiale = this.panneauActionTour.getHeight();
+
+        double posXInitiale = caseCenterX - (largeurInitiale / 2);
+        double posYInitiale = posY - hauteurInitiale - 10;
+
+        double largeurMaxConteneur = conteneurPrincipal.getWidth();
+        if (posXInitiale + largeurInitiale > largeurMaxConteneur - env.getTailleTuile()) {
+            posXInitiale = largeurMaxConteneur - largeurInitiale - env.getTailleTuile();
+        }
+
+        this.panneauActionTour.setLayoutX(posXInitiale);
+        this.panneauActionTour.setLayoutY(posYInitiale);
+
+        this.panneauActionTour.widthProperty().addListener((obs, oldWidth, newWidth) -> {
+            double largeurReelle = newWidth.doubleValue();
+            double hauteurReelle = this.panneauActionTour.getHeight();
+            double posX = caseCenterX - (largeurReelle / 2);
+            double correctedPosY = posY - hauteurReelle - 10;
+
+            if (posX + largeurReelle > largeurMaxConteneur - largeurReelle - env.getTailleTuile()) {
+                posX = largeurMaxConteneur - largeurReelle - env.getTailleTuile();
+            }
+            if (posX < env.getTailleTuile()) {
+                posX = env.getTailleTuile();
+            }
+
+            this.panneauActionTour.setLayoutX(posX);
+            this.panneauActionTour.setLayoutY(correctedPosY);
+        });
+
+        for (Button b : boutonsInventaire) {
+            b.getStyleClass().remove("case-inventaire-selectionnee");
+        }
+        btn.getStyleClass().add("case-inventaire-selectionnee");
+    }
+
+    private void configurerEvenementsTerrain() {
+        conteneurPrincipal.setOnMouseClicked(event -> {
+            if (event.getButton() == MouseButton.SECONDARY) {
+                gestionnaireTours.annulerPlacement();
+                masquerPanneau();
+                return;
+            }
+
+            if (gestionnaireTours.estModePlacementTour() && this.tourEnInspection != null) {
+                double xSurGrille = event.getX() - grilleJeu.getLayoutX();
+                double ySurGrille = event.getY() - grilleJeu.getLayoutY();
+
+                int indexBouton = gestionnaireTours.getIndexInventaireActu();
+                Tour nouvelleTour = gestionnaireTours.gererClicTerrain(xSurGrille, ySurGrille);
+
+                if (nouvelleTour != null) {
+                    int tailleTuile = env.getTailleTuile();
+                    int caseX = (int) (xSurGrille / tailleTuile);
+                    int caseY = (int) (ySurGrille / tailleTuile);
+
+                    double pixelX = grilleJeu.getLayoutX() + (caseX * tailleTuile);
+                    double pixelY = grilleJeu.getLayoutY() + (caseY * tailleTuile);
+
+                    nouvelleTour.setX(pixelX);
+                    nouvelleTour.setY(pixelY);
+
+                    TourVue tourVue = new TourVue(nouvelleTour.getNomImage(), pixelX, pixelY);
+                    if (!jeuDemarre) tourVue.cacherRadar();
+                    vuesTours.put(nouvelleTour, tourVue);
+                    conteneurPrincipal.getChildren().add(tourVue);
+
+                    Button caseInventaire = boutonsInventaire.get(indexBouton);
+                    caseInventaire.getStyleClass().remove("case-inventaire-selectionnee");
+                    caseInventaire.getStyleClass().add("case-tour-posee");
+                    caseInventaire.setDisable(false);
+
+                    if (!jeuDemarre && boutonStart != null) {
+                        boutonStart.setDisable(false);
+                    }
+                }
+            }
+        });
+    }
+
+    private Tour creerTourDepuisType(String typeTour) {
+        if (typeTour == null) return null;
+        return switch (typeTour) {
+            case "scientifique" -> new TourScientifique(0, 0);
+            case "chimiste"     -> new TourChimiste(0, 0);
+            case "scanner"      -> new TourScanner(0, 0);
+            case "rayon_x"      -> new TourRayonX(0, 0);
+            default             -> null;
+        };
     }
 
     public void verrouillerInterface(boolean verrouiller) {
@@ -586,12 +793,58 @@ public class Controller implements Initializable {
 
     @FXML
     private void actionUtiliserSoin() { controllerPotion.utiliserSoin(); }
+ @FXML
+    private void actionUtiliserSoin() {
+        utiliserPotion(TypePotion.SOIN, btnPotionSoin, env.getNbPotionSoin(), env::setNbPotionSoin);
+    }
 
     @FXML
     private void actionUtiliserRage() { controllerPotion.utiliserRage(); }
+    private void actionUtiliserRage() {
+        utiliserPotion(TypePotion.RAGE, btnPotionRage, env.getNbPotionRage(), env::setNbPotionRage);
+    }
 
     @FXML
     private void actionUtiliserGel()  { controllerPotion.utiliserGel(); }
+    private void actionUtiliserGel() {
+        utiliserPotion(TypePotion.GEL, btnPotionGel, env.getNbPotionGel(), env::setNbPotionGel);
+    }
+
+   private void utiliserPotion(TypePotion type, Button bouton, int quantite,
+                                java.util.function.IntConsumer modifierQuantite) {
+        if (quantite <= 0 || potionsEnCooldown.getOrDefault(type, false)) {
+            return;
+        }
+
+        potionsEnCooldown.put(type, true);
+        modifierQuantite.accept(quantite - 1);
+
+        Potion potion = type.creerPotion();
+        potion.appliquerEffet(env);
+        updateCompteurs();
+
+        bouton.setDisable(true);
+
+       potionVue.animerJaugeActive(bouton, 5.0, () -> {
+            bouton.setDisable(false);
+            potionsEnCooldown.put(type, false);
+        });
+    }
+
+    private void acheterPotion(TypePotion type) {
+        int prix = type.getPrix();
+        if (env.getArgent() < prix) {
+            return;
+        }
+
+        env.reduireArgent(prix);
+        switch (type) {
+            case SOIN -> env.setNbPotionSoin(env.getNbPotionSoin() + 1);
+            case RAGE -> env.setNbPotionRage(env.getNbPotionRage() + 1);
+            case GEL -> env.setNbPotionGel(env.getNbPotionGel() + 1);
+        }
+        updateCompteurs();
+    }
 
     @FXML
     private void LancerJeu() {

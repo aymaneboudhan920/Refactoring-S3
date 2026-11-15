@@ -6,6 +6,9 @@ public enum TypePotion {
     SOIN("potion_soin", PotionSoin.prixAchat, PotionSoin::new),
     RAGE("potion_rage", PotionRage.prixAchat, PotionRage::new),
     GEL("potion_gel", PotionGel.prixAchat, PotionGel::new);
+    SOIN("potion_soin", PotionSoin.prixAchat),
+    RAGE("potion_rage", PotionRage.prixAchat),
+    GEL("potion_gel", PotionGel.prixAchat);
 
     private final String identifiant;
     private final int prix;
@@ -28,6 +31,11 @@ public enum TypePotion {
 
     public Potion creerPotion() {
         return fabrique.get();
+        return switch (this) {
+            case SOIN -> new PotionSoin();
+            case RAGE -> new PotionRage();
+            case GEL -> new PotionGel();
+        };
     }
 
 }

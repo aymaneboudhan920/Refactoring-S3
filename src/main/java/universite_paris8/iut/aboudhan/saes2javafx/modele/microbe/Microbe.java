@@ -7,7 +7,6 @@ import javafx.beans.property.SimpleDoubleProperty;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class Microbe {
     private final DoubleProperty x = new SimpleDoubleProperty();
@@ -22,14 +21,10 @@ public class Microbe {
     private TypeMicrobe type;
     private boolean estGele = false;
     private boolean estRalenti = false;
-    private boolean aDeclencheRage = false;
     private boolean doitAfficherEclair = false;
     private final List<Tour> tourAReset = new ArrayList<>();
-    private final Random random = new Random();
 
-    private double chronoCycle = 0;
-    private double tempsProchainSommeil;
-    private int etatVaricelle = 0;
+    private ComportementMicrobe comportement;
 
     public Microbe(double v, double pm, int r, int i, TypeMicrobe type, Waypoint waypointDepart){
         this.vitesseDeBase = v;
@@ -39,10 +34,7 @@ public class Microbe {
         this.recompense = r;
         this.infection = i;
         this.type = type;
-
-        if (TypeMicrobe.VARICELLE.equals(this.type)) {
-            this.tempsProchainSommeil = 2 + (random.nextDouble() * 3);
-        }
+        this.comportement = ComportementMicrobe.pour(type);
 
         if (waypointDepart != null) {
             this.x.set(waypointDepart.getX());
@@ -56,6 +48,7 @@ public class Microbe {
     }
 
     public void deplacer(){
+        this.comportement.mettreAJourVitesse(this);
         if (TypeMicrobe.VARICELLE.equals(this.type)) {
             mettreAJourComportementVaricelle(0.012);
         }
@@ -164,10 +157,12 @@ public class Microbe {
         } else {
             this.vitesseActu = this.vitesseDeBase;
         }
+        this.vitesseActu = this.comportement.vitesseDeReprise(this);
     }
 
     public void perdreVie(double degats, Tour tour){
         this.pv.set(Math.max(0, this.pv.get() - degats));
+        this.comportement.apresDegats(this, tour);
         if (TypeMicrobe.VIH.equals(this.type) && tour != null) {
             tour.etourdir(0.1);
             this.doitAfficherEclair = true;
@@ -190,4 +185,23 @@ public class Microbe {
     }
 
     public boolean estEnrage() { return this.getRatioPV() <= 0.25; }
+
+    boolean estGele() { return this.estGele; }
+
+    boolean estRalenti() { return this.estRalenti; }
+
+    void fixerVitesseActu(double valeur) { this.vitesseActu = valeur; }
+
+    void marquerEclair(Tour tour) {
+        this.doitAfficherEclair = true;
+        this.tourAReset.add(tour);
+    }
+
+    void devenirEnrage() {
+        this.type = "RAGE_ENRAGE";
+        this.vitesseDeBase = 2.0;
+        this.vitesseActu = 2.0;
+        this.comportement = new ComportementNormal();
+    }
+}
 }

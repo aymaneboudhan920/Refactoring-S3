@@ -57,13 +57,19 @@ public class ControllerShop {
         } else {
             tourController.acheterTour(typeItem);
         }
+
         fermerShop();
     }
 
     public void fermerShop() {
         if (shopActuel == null) return;
+        if (shopActuel == null) {
+            return;
+        }
+
         shopActuel.cacher(conteneurPrincipal);
         shopActuel = null;
+
         controllerPrincipal.verrouillerInterface(false);
         controllerPrincipal.reprendreJeu();
     }
