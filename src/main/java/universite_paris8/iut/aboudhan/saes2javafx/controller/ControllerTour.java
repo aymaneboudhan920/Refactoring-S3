@@ -189,7 +189,6 @@ public class ControllerTour extends ControllerAchat {
 
                     nouvelleTour.setX(pixelX);
                     nouvelleTour.setY(pixelY);
-                    System.out.println("IMAGE = " + nouvelleTour.getNomImage());
 
                     TourVue tourVue = new TourVue(nouvelleTour.getNomImage(), pixelX, pixelY);
                     if (!controllerPrincipal.jeuDemarre) tourVue.cacherRadar();

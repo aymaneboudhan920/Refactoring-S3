@@ -9,7 +9,7 @@ public class TourScanner extends Tour {
     public static int prixAchat = 75;
 
     public TourScanner(double x, double y) {
-        super(x, y, 102, 10, 0.8, prixAchat, "/.../tour_scanner.png", new AttaqueScanner());
+        super(x, y, 102, 10, 0.8, prixAchat, "/universite_paris8/iut/aboudhan/saes2javafx/vue/tour_scanner.png", new AttaqueScanner());
     }
 
     public double getRayonAnimationActuel() {
