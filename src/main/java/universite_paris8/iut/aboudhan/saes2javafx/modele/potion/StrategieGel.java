@@ -7,7 +7,7 @@ public class StrategieGel implements EffetPotionStrategie {
     private int duree;
 
     public StrategieGel() {
-        this.duree = duree;
+        this.duree = 2;
     }
 
     @Override
