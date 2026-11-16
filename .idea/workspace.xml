@@ -5,9 +5,30 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="edfabb9a-22c8-42e6-a534-9da796c07ca1" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/universite_paris8/iut/aboudhan/saes2javafx/Lancement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/universite_paris8/iut/aboudhan/saes2javafx/Lancement.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/resources/universite_paris8/iut/aboudhan/saes2javafx/vueSAE-S2.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/universite_paris8/iut/aboudhan/saes2javafx/vueSAE-S2.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/universite_paris8/iut/aboudhan/saes2javafx/modele/tour/TourChimiste.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/universite_paris8/iut/aboudhan/saes2javafx/modele/tour/TourChimiste.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/universite_paris8/iut/aboudhan/saes2javafx/modele/tour/TourScientifique.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/universite_paris8/iut/aboudhan/saes2javafx/modele/tour/TourScientifique.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/universite_paris8/iut/aboudhan/saes2javafx/controller/Controller$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/universite_paris8/iut/aboudhan/saes2javafx/controller/Controller$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/universite_paris8/iut/aboudhan/saes2javafx/controller/Controller.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/universite_paris8/iut/aboudhan/saes2javafx/controller/Controller.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/universite_paris8/iut/aboudhan/saes2javafx/controller/ControllerPotion.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/universite_paris8/iut/aboudhan/saes2javafx/controller/ControllerPotion.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/universite_paris8/iut/aboudhan/saes2javafx/controller/ControllerShop.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/universite_paris8/iut/aboudhan/saes2javafx/controller/ControllerShop.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/universite_paris8/iut/aboudhan/saes2javafx/controller/ControllerTour.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/universite_paris8/iut/aboudhan/saes2javafx/controller/ControllerTour.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/universite_paris8/iut/aboudhan/saes2javafx/modele/jeu/Configuration.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/universite_paris8/iut/aboudhan/saes2javafx/modele/jeu/Configuration.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/universite_paris8/iut/aboudhan/saes2javafx/modele/jeu/Environnement.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/universite_paris8/iut/aboudhan/saes2javafx/modele/jeu/Environnement.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/universite_paris8/iut/aboudhan/saes2javafx/modele/microbe/GestionnaireVagues.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/universite_paris8/iut/aboudhan/saes2javafx/modele/microbe/GestionnaireVagues.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/universite_paris8/iut/aboudhan/saes2javafx/modele/microbe/Microbe.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/universite_paris8/iut/aboudhan/saes2javafx/modele/microbe/Microbe.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/universite_paris8/iut/aboudhan/saes2javafx/modele/potion/Potion.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/universite_paris8/iut/aboudhan/saes2javafx/modele/potion/Potion.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/universite_paris8/iut/aboudhan/saes2javafx/modele/potion/PotionGel.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/universite_paris8/iut/aboudhan/saes2javafx/modele/potion/PotionGel.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/universite_paris8/iut/aboudhan/saes2javafx/modele/potion/PotionRage.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/universite_paris8/iut/aboudhan/saes2javafx/modele/potion/PotionRage.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/universite_paris8/iut/aboudhan/saes2javafx/modele/potion/PotionSoin.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/universite_paris8/iut/aboudhan/saes2javafx/modele/potion/PotionSoin.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/universite_paris8/iut/aboudhan/saes2javafx/modele/potion/TypePotion.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/universite_paris8/iut/aboudhan/saes2javafx/modele/potion/TypePotion.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/universite_paris8/iut/aboudhan/saes2javafx/modele/tour/GestionnaireTours.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/universite_paris8/iut/aboudhan/saes2javafx/modele/tour/GestionnaireTours.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/universite_paris8/iut/aboudhan/saes2javafx/modele/tour/Projectile.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/universite_paris8/iut/aboudhan/saes2javafx/modele/tour/Projectile.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/universite_paris8/iut/aboudhan/saes2javafx/modele/tour/Tour.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/universite_paris8/iut/aboudhan/saes2javafx/modele/tour/Tour.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/universite_paris8/iut/aboudhan/saes2javafx/modele/tour/TourChimiste.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/universite_paris8/iut/aboudhan/saes2javafx/modele/tour/TourChimiste.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/universite_paris8/iut/aboudhan/saes2javafx/modele/tour/TourRayonX.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/universite_paris8/iut/aboudhan/saes2javafx/modele/tour/TourRayonX.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/universite_paris8/iut/aboudhan/saes2javafx/modele/tour/TourScanner.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/universite_paris8/iut/aboudhan/saes2javafx/modele/tour/TourScanner.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/universite_paris8/iut/aboudhan/saes2javafx/modele/tour/TourScientifique.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/universite_paris8/iut/aboudhan/saes2javafx/modele/tour/TourScientifique.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/universite_paris8/iut/aboudhan/saes2javafx/vue/tour/ProjectileVue.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/universite_paris8/iut/aboudhan/saes2javafx/vue/tour/ProjectileVue.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -103,6 +124,9 @@
   &quot;associatedIndex&quot;: 8
 }</component>
   <component name="ProjectId" id="3KjtRR5ltXExRwYJOeM6aiL8H7N" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -117,7 +141,7 @@
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
     "codeWithMe.voiceChat.enabledByDefault": "false",
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "git-widget-placeholder": "achille",
+    "git-widget-placeholder": "main",
     "junie.onboarding.icon.badge.shown": "true",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/achil/Desktop/Cours/Refactoring-S3-main",
