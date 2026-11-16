@@ -101,7 +101,7 @@ public abstract class Tour {
         this.vitesseTir = this.vitesseTir * 1.1;
     }
 
-    public Projectile initProjectile(Microbe cible, double vitesse, String type) {
+    public Projectile initProjectile(Microbe cible, double vitesse, TypeTour type) {
         return new Projectile(x, y, vitesse, cible, type, degats, this);
     }
 }
