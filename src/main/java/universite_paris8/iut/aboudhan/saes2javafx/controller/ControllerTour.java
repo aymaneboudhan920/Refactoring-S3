@@ -28,17 +28,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class ControllerTour {
 public class ControllerTour extends ControllerAchat {
 
     public static final int NB_CASES_INVENTAIRE = 8;
 
-    private final Environnement env;
     private final Pane conteneurPrincipal;
     private final TilePane grilleJeu;
     private final GridPane grilleInventaire;
-    private final Inventaire inventaireModele;
-    private final InventaireVue inventaireVue;
     private final Controller controllerPrincipal;
 
     public Inventaire inventaireModele;
@@ -47,7 +43,6 @@ public class ControllerTour extends ControllerAchat {
     public final List<Button> boutonsInventaire = new ArrayList<>();
     private final List<ImageView> imagesInventaire = new ArrayList<>();
     private final List<Label> labelsInventaire = new ArrayList<>();
-    public ControllerTour(Environnement env, Inventaire inventaireModele, InventaireVue inventaireVue, Controller controllerPrincipal) {
 
     private PanneauActionVue panneauActionTour;
     private Tour tourEnInspection = null;
@@ -57,13 +52,10 @@ public class ControllerTour extends ControllerAchat {
 
     public ControllerTour(Environnement env, Pane conteneurPrincipal, TilePane grilleJeu,
                           GridPane grilleInventaire, Controller controllerPrincipal) {
-        this.env = env;
+        super(env);
         this.conteneurPrincipal = conteneurPrincipal;
         this.grilleJeu = grilleJeu;
         this.grilleInventaire = grilleInventaire;
-        super(env);
-        this.inventaireModele = inventaireModele;
-        this.inventaireVue = inventaireVue;
         this.controllerPrincipal = controllerPrincipal;
     }
 
@@ -197,6 +189,7 @@ public class ControllerTour extends ControllerAchat {
 
                     nouvelleTour.setX(pixelX);
                     nouvelleTour.setY(pixelY);
+                    System.out.println("IMAGE = " + nouvelleTour.getNomImage());
 
                     TourVue tourVue = new TourVue(nouvelleTour.getNomImage(), pixelX, pixelY);
                     if (!controllerPrincipal.jeuDemarre) tourVue.cacherRadar();
@@ -217,8 +210,6 @@ public class ControllerTour extends ControllerAchat {
     }
 
     public boolean acheterTour(String typeItem) {
-        int prix = prixDe(typeItem);
-        if (prix < 0 || env.getArgent() < prix) return false;
         return acheter(typeItem);
     }
 
@@ -246,27 +237,13 @@ public class ControllerTour extends ControllerAchat {
     @Override
     protected void appliquerAchat(String typeItem) {
         int caseLibre = inventaireModele.getPremiereCaseLibre();
-        if (caseLibre == -1) return false;
-
         Tour tour = creerTourDepuisType(typeItem);
-        if (tour == null) return false;
+        if (caseLibre == -1 || tour == null) return;
 
-        env.reduireArgent(prix);
         inventaireModele.setTourCase(caseLibre, typeItem);
         inventaireVue.installerTour(caseLibre, typeItem);
         env.getTourVersIndexInventaire().put(tour, caseLibre);
         controllerPrincipal.updateCompteurs();
-        return true;
-    }
-
-    private int prixDe(String typeItem) {
-        return switch (typeItem) {
-            case "scientifique" -> TourScientifique.prixAchat;
-            case "chimiste"     -> TourChimiste.prixAchat;
-            case "scanner"      -> TourScanner.prixAchat;
-            case "rayon_x"      -> TourRayonX.prixAchat;
-            default -> -1;
-        };
     }
 
     private Tour creerTourDepuisType(String typeItem) {
@@ -408,17 +385,6 @@ public class ControllerTour extends ControllerAchat {
                 String typeTour = inventaireModele.getTourCase(i);
                 boutonsInventaire.get(i).setDisable(typeTour == null);
             }
-        switch (typeItem) {
-            case "scientifique":
-                return new TourScientifique(0, 0);
-            case "chimiste":
-                return new TourChimiste(0, 0);
-            case "scanner":
-                return new TourScanner(0, 0);
-            case "rayon_x":
-                return new TourRayonX(0, 0);
-            default:
-                return null;
         }
     }
 }

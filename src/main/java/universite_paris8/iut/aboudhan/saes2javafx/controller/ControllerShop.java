@@ -62,7 +62,6 @@ public class ControllerShop {
     }
 
     public void fermerShop() {
-        if (shopActuel == null) return;
         if (shopActuel == null) {
             return;
         }

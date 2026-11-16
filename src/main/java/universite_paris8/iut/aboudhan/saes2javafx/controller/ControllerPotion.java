@@ -36,14 +36,13 @@ public class ControllerPotion {
 
         env.reduireArgent(type.getPrix());
         switch (type) {
-            case "potion_soin" -> env.setNbPotionSoin(env.getNbPotionSoin() + 1);
-            case "potion_rage" -> env.setNbPotionRage(env.getNbPotionRage() + 1);
-            case "potion_gel"  -> env.setNbPotionGel(env.getNbPotionGel() + 1);
+            case SOIN -> env.setNbPotionSoin(env.getNbPotionSoin() + 1);
+            case RAGE -> env.setNbPotionRage(env.getNbPotionRage() + 1);
+            case GEL  -> env.setNbPotionGel(env.getNbPotionGel() + 1);
         }
         controllerPrincipal.updateCompteurs();
         return true;
     }
-
 
     public void utiliserSoin() { utiliser(TypePotion.SOIN, btnSoin, env.getNbPotionSoin(), env::setNbPotionSoin); }
     public void utiliserRage() { utiliser(TypePotion.RAGE, btnRage, env.getNbPotionRage(), env::setNbPotionRage); }

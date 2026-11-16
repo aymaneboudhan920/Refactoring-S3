@@ -30,7 +30,7 @@ public class Environnement {
     public static final int CASE_TOUR = 99;
     private static final int CASE_CHEMIN_MIN = 1;
     private static final int CASE_CHEMIN_MAX = 6;
-    private static final int ARGENT_INITIAL = 50;
+    private static final int ARGENT_INITIAL = 50000000;
     private static final int SEUIL_DEFAITE = 70;
 
     private final Terrain terrain;
