@@ -227,12 +227,10 @@ public class Controller implements Initializable {
                                 prochainMicrobe.getRatioPV()
                         );
 
-                        // 1. Binding de la vie
                         vue.getBarreDeVie().progressProperty().bind(
                                 prochainMicrobe.pvProperty().divide(prochainMicrobe.pvMax)
                         );
 
-                        // 2. BINDING DE LA POSITION
                         vue.translateXProperty().bind(prochainMicrobe.xProperty());
                         vue.translateYProperty().bind(prochainMicrobe.yProperty().subtract(5));
 
@@ -320,8 +318,7 @@ public class Controller implements Initializable {
         List<Tour> toursEnJeu = new ArrayList<>(vuesTours.keySet());
         for (Tour tour : toursEnJeu) {
             tour.mettreAJourRecharge(deltaTps);
-            if (tour instanceof TourRayonX) {
-                TourRayonX tourRayonX = (TourRayonX) tour;
+            if (tour instanceof TourRayonX tourRayonX) {
                 if (tour.estEtourdie()) {
                     if (tourRayonX.getRayonActuel() != null) tourRayonX.getRayonActuel().setDetruit(true);
                 } else {
@@ -352,10 +349,10 @@ public class Controller implements Initializable {
                 unMicrobeEstMort = true;
             }
             MicrobeVue imageVue = vuesMicrobes.get(m);
-            if (imageVue != null && TypeMicrobe.RAGE_ENRAGE.equals(m.getType())) {
+            if (imageVue != null && m.getType() == TypeMicrobe.RAGE_ENRAGE) {
                 imageVue.changerImage(TypeMicrobe.RAGE_ENRAGE);
             }
-            if (m.getType().equals("VIH") && m.doitAfficherEclair()) {
+            if (m.getType() == TypeMicrobe.VIH && m.doitAfficherEclair()) {
                 for (int i = 0; i < m.getTourAReset().size(); i++) {
                     Tour tourCible = m.getTourAReset().get(i);
                     if (tourCible != null) {
@@ -384,8 +381,7 @@ public class Controller implements Initializable {
 
     private void cacherRadarsScanners() {
         for (Map.Entry<Tour, TourVue> entree : vuesTours.entrySet()) {
-            if (entree.getKey() instanceof TourScanner) {
-                TourScanner scanner = (TourScanner) entree.getKey();
+            if (entree.getKey() instanceof TourScanner scanner) {
                 TourVue vue = entree.getValue();
 
                 scanner.reinitialiserAttaque();
