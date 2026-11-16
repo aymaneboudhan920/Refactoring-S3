@@ -7,10 +7,12 @@ public enum TypePotion {
 
     private final String identifiant;
     private final int prix;
+    private final Supplier<Potion> fabrique;
 
     TypePotion(String identifiant, int prix) {
         this.identifiant = identifiant;
         this.prix = prix;
+        this.fabrique = fabrique;
     }
 
     public String getIdentifiant() { return identifiant; }
@@ -24,11 +26,7 @@ public enum TypePotion {
     }
 
     public Potion creerPotion() {
-        return switch (this) {
-            case SOIN -> new PotionSoin();
-            case RAGE -> new PotionRage();
-            case GEL -> new PotionGel();
-        };
+        return fabrique.get();
     }
 
 }
