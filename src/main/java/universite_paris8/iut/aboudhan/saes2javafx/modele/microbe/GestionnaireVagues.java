@@ -38,34 +38,34 @@ public class GestionnaireVagues {
     }
 
     public void initialiserVagues(Environnement env) {
-    listeVagues.clear();
-
-    // { intervalle, nbMicrobes, indexMin, indexMax }
-    double[][] configurationsVagues = {
-        {1.0, 10, 0, 1},
-        {1.5, 15, 0, 2},
-        {1.5, 15, 0, 3},
-        {1.5, 15, 1, 4},
-        {1.0, 20, 1, 5},
-        {1.0, 20, 2, 6},
-        {0.5, 25, 2, 7},
-        {0.5, 25, 3, 8},
-        {0.5, 25, 4, 9},
-        {1.0, 30, 4, 10}
-    };
-
-    for (int i = 0; i < configurationsVagues.length; i++) {
-        int numVague = i + 1;
-        listeVagues.add(creerVague(
-            env, 
-            configurationsVagues[i][0], 
-            (int) configurationsVagues[i][1], 
-            (int) configurationsVagues[i][2], 
-            (int) configurationsVagues[i][3], 
-            numVague
-        ));
+        listeVagues.clear();
+    
+        // { intervalle, nbMicrobes, indexMin, indexMax }
+        double[][] configurationsVagues = {
+            {1.0, 10, 0, 1},
+            {1.5, 15, 0, 2},
+            {1.5, 15, 0, 3},
+            {1.5, 15, 1, 4},
+            {1.0, 20, 1, 5},
+            {1.0, 20, 2, 6},
+            {0.5, 25, 2, 7},
+            {0.5, 25, 3, 8},
+            {0.5, 25, 4, 9},
+            {1.0, 30, 4, 10}
+        };
+    
+        for (int i = 0; i < configurationsVagues.length; i++) {
+            int numVague = i + 1;
+            listeVagues.add(creerVague(
+                env, 
+                configurationsVagues[i][0], 
+                (int) configurationsVagues[i][1], 
+                (int) configurationsVagues[i][2], 
+                (int) configurationsVagues[i][3], 
+                numVague
+            ));
+        }
     }
-}
 
     public void reinitialiser(Environnement env) {
         this.numVagueActu = 0;
