@@ -20,7 +20,7 @@ public class ProjectileVue extends Pane {
     public void rafraichirVue(double coordonneeTourX, double coordonneeTourY) {
         this.getChildren().clear();
 
-        switch (projectile.getType()) {
+        switch (projectile.getType().name()) {
             case "SCIENTIFIQUE":
                 ImageView imgSeringue = new ImageView(new Image(getClass().getResourceAsStream("/universite_paris8/iut/aboudhan/saes2javafx/vue/seringue.png")));
                 imgSeringue.setFitWidth(16);
