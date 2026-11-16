@@ -2,16 +2,15 @@ package universite_paris8.iut.aboudhan.saes2javafx.modele.tour;
 
 import universite_paris8.iut.aboudhan.saes2javafx.modele.jeu.Environnement;
 import universite_paris8.iut.aboudhan.saes2javafx.modele.microbe.Microbe;
-
-import java.util.List;
+import universite_paris8.iut.aboudhan.saes2javafx.modele.microbe.TypeMicrobe;
 
 public class AttaqueProjectile implements StratAttaque {
     private final double vitesseProjectile;
-    private final String typeProjectile;
+    private final TypeTour typeTour;
 
-    public AttaqueProjectile(double vitesseProjectile, String typeProjectile) {
+    public AttaqueProjectile(double vitesseProjectile, TypeTour typeTour) {
         this.vitesseProjectile = vitesseProjectile;
-        this.typeProjectile = typeProjectile;
+        this.typeTour = typeTour;
     }
 
     @Override
@@ -19,8 +18,8 @@ public class AttaqueProjectile implements StratAttaque {
         if (!tour.peutAttaquer()) return;
 
         for (Microbe m : env.getMicrobesActifs()) {
-            if (!m.estMort() && !"INFLUENZA".equals(m.getType()) && tour.estAPortee(m)) {
-                env.ajouterProjectile(tour.initProjectile(m, vitesseProjectile, typeProjectile));
+            if (!m.estMort() && !(m.getType() == TypeMicrobe.INFLUENZA) && tour.estAPortee(m)) {
+                env.ajouterProjectile(tour.initProjectile(m, vitesseProjectile, typeTour));
                 tour.recharger();
                 return;
             }
