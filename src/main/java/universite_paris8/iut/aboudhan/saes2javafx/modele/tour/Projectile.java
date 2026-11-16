@@ -8,12 +8,12 @@ public class Projectile {
     private double x, y;
     private final double vitesse;
     private final Microbe cible;
-    private final String type;
+    private final TypeTour type;
     private boolean detruit;
     private final double degats;
     private final Tour tourSource;
 
-    public Projectile(double x, double y, double vitesse, Microbe cible, String type, double degats, Tour tourSource) {
+    public Projectile(double x, double y, double vitesse, Microbe cible, TypeTour type, double degats, Tour tourSource) {
         this.x = x;
         this.y = y;
         this.vitesse = vitesse;
@@ -30,9 +30,8 @@ public class Projectile {
             return;
         }
 
-        if (type.equals("RAYON_X")) {
+        if (type == TypeTour.RAYON_X) 
             return;
-        }
 
         double diffX = cible.getX() - this.x;
         double diffY = cible.getY() - this.y;
@@ -42,11 +41,9 @@ public class Projectile {
             this.x = cible.getX();
             this.y = cible.getY();
 
-            if (type.equals("CHIMISTE")) {
+            if (type == TypeTour.CHIMISTE) {
                 // Parcourt tous les microbes actifs
-                for (int i = 0; i < microbesActifs.size(); i++) {
-                    Microbe m = microbesActifs.get(i);
-
+                for (Microbe m : microbesActifs) {
                     // On ne touche que les microbes vivants
                     if (!m.estMort()) {
                         double dX = m.getX() - this.x;
@@ -73,7 +70,7 @@ public class Projectile {
     // Getters & Setters
     public double getX() { return x; }
     public double getY() { return y; }
-    public String getType() { return type; }
+    public TypeTour getType() { return type; }
     public boolean estDetruit() { return detruit; }
     public void setDetruit(boolean detruit) {
         this.detruit = detruit;
