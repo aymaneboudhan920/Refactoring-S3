@@ -2,6 +2,7 @@ package universite_paris8.iut.aboudhan.saes2javafx.modele.tour;
 
 import universite_paris8.iut.aboudhan.saes2javafx.modele.jeu.Environnement;
 import universite_paris8.iut.aboudhan.saes2javafx.modele.microbe.Microbe;
+import universite_paris8.iut.aboudhan.saes2javafx.modele.microbe.TypeMicrobe;
 
 import java.util.List;
 
@@ -11,7 +12,7 @@ public class TourChimiste extends Tour {
 
     public TourChimiste(double x, double y) {
         super(x, y, PORTEE, 15, 0.33, prixAchat, "/universite_paris8/iut/aboudhan/saes2javafx/vue/tour_chimiste.png",
-                new AttaqueProjectile(5.0, "CHIMISTE"));
+                new AttaqueProjectile(5.0, TypeTour.CHIMISTE));
     }
 
     @Override
@@ -21,7 +22,7 @@ public class TourChimiste extends Tour {
 
         for (int i = 0; i < microbesActifs.size() && cible == null; i++) {
             Microbe m = microbesActifs.get(i);
-            if (!m.estMort() && !"INFLUENZA".equals(m.getType())) {
+            if (!m.estMort() && !(m.getType() == TypeMicrobe.INFLUENZA)) {
                 double diffX = m.getX() - this.getX();
                 double diffY = m.getY() - this.getY();
                 double distance = Math.sqrt(diffX * diffX + diffY * diffY);
@@ -33,7 +34,7 @@ public class TourChimiste extends Tour {
         }
 
         if (cible != null && peutAttaquer()) {
-            Projectile potion = new Projectile(this.getX(), this.getY(), 5.0, cible, "CHIMISTE", this.getDegats(), this);
+            Projectile potion = new Projectile(this.getX(), this.getY(), 5.0, cible, TypeTour.CHIMISTE, this.getDegats(), this);
             env.ajouterProjectile(potion);
             this.recharger();
         }
