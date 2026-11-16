@@ -2,6 +2,7 @@ package universite_paris8.iut.aboudhan.saes2javafx.modele.tour;
 
 import universite_paris8.iut.aboudhan.saes2javafx.modele.jeu.Environnement;
 import universite_paris8.iut.aboudhan.saes2javafx.modele.microbe.Microbe;
+import universite_paris8.iut.aboudhan.saes2javafx.modele.microbe.TypeMicrobe;
 
 import java.util.List;
 
@@ -27,7 +28,7 @@ public class AttaqueRayonX implements StratAttaque {
         if (cibleActuelle == null) {
             for (int i = 0; i < microbes.size() && cibleActuelle == null; i++) {
                 Microbe m = microbes.get(i);
-                if (!m.estMort() && tour.estAPortee(m) && !"INFLUENZA".equals(m.getType())) {
+                if (!m.estMort() && tour.estAPortee(m) && !(m.getType() == TypeMicrobe.INFLUENZA)){
                     cibleActuelle = m;
                     degatsActuels = DEGATS_MIN;
                 }
@@ -37,7 +38,7 @@ public class AttaqueRayonX implements StratAttaque {
         if (cibleActuelle != null && tour.peutAttaquer()) {
             if (rayonActuel == null || rayonActuel.estDetruit()) {
                 rayonActuel = new Projectile(tour.getX(), tour.getY(), 0.0,
-                        cibleActuelle, "RAYON_X", degatsActuels, tour);
+                        cibleActuelle, TypeTour.RAYON_X, degatsActuels, tour);
                 env.ajouterProjectile(rayonActuel);
             }
             cibleActuelle.perdreVie(degatsActuels, tour);
