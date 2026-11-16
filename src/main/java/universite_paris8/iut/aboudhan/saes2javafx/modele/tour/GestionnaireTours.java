@@ -55,37 +55,36 @@ public class GestionnaireTours {
     }
 
     private Tour placerTour(int caseX, int caseY) {
-        Tour tourAPlacer = null;
-
-        for (Map.Entry<Tour, Integer> association : env.getTourVersIndexInventaire().entrySet()) {
-            if (association.getValue() == indexInventaireActu) {
-                tourAPlacer = association.getKey();
-            }
-        }
-
+        Tour tourAPlacer = trouverTourParIndex(indexInventaireActu);
+    
         if (tourAPlacer != null) {
             env.enregistrerTourPosee(tourAPlacer, caseX, caseY, indexInventaireActu);
-
-            modePlacementTour = false;
-            tourCliquee = null;
+            annulerPlacement();
         }
-
         return tourAPlacer;
+    }
+    
+    public Tour trouverTourPosee(int index) {
+        Tour tour = trouverTourParIndex(index);
+        if (tour != null && env.getToursPosees().contains(tour)) {
+            return tour;
+        }
+        return null;
+    }
+    
+    private Tour trouverTourParIndex(int index) {
+        for (Map.Entry<Tour, Integer> entry : env.getTourVersIndexInventaire().entrySet()) {
+            if (entry.getValue() == index) {
+                return entry.getKey();
+            }
+        }
+        return null;
     }
 
     public void annulerPlacement() {
         modePlacementTour = false;
         tourCliquee = null;
         indexInventaireActu = -1;
-    }
-
-    public Tour trouverTourPosee(int index) {
-        for (Map.Entry<Tour, Integer> association : env.getTourVersIndexInventaire().entrySet()) {
-            if (association.getValue() == index && env.getToursPosees().contains(association.getKey())) {
-                return association.getKey();
-            }
-        }
-        return null;
     }
 
     public void reinitialiser() {
