@@ -402,7 +402,7 @@ public class Controller implements Initializable {
 
                 for (int i = 0; i < listeTours.size() && !trouve; i++) {
                     Tour t = listeTours.get(i);
-                    if (p.getType().equals("RAYON_X") && t.getX() == p.getX() && t.getY() == p.getY()) {
+                    if ((p.getType() == TypeTour.RAYON_X) && t.getX() == p.getX() && t.getY() == p.getY()) {
                         tourX = t.getX();
                         tourY = t.getY();
                         trouve = true;
