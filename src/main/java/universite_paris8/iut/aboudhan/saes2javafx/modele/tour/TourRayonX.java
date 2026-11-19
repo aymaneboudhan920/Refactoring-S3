@@ -6,7 +6,7 @@ public class TourRayonX extends Tour {
     public static final int prixAchat = 100;
 
     public TourRayonX(double x, double y) {
-        super(x, y, 102, 2, 10, prixAchat, "/universite_paris8/iut/aboudhan/saes2javafx/vue/tour_rayon_x.png", new AttaqueRayonX());
+        super(x, y, 102, 0.5, 10, prixAchat, "/universite_paris8/iut/aboudhan/saes2javafx/vue/tour_rayon_x.png", new AttaqueRayonX());
     }
 
     public Projectile getRayonActuel() { return ((AttaqueRayonX) getStratAttaque()).getRayonActuel(); }
