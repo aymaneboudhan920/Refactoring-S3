@@ -4,7 +4,7 @@ import javafx.util.Duration;
 import universite_paris8.iut.aboudhan.saes2javafx.modele.jeu.Environnement;
 
 public class StrategieGel implements EffetPotionStrategie {
-    private int duree;
+    private final int duree;
 
     public StrategieGel() {
         this.duree = 2;
