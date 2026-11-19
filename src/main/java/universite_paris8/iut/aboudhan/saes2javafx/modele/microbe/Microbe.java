@@ -104,12 +104,6 @@ public class Microbe {
     public double getY() { return y.get(); }
     public void setY(double y) { this.y.set(y); }
 
-    public void reinitialiserVitesse() {
-        this.estGele = false;
-        this.vitesseActu = this.comportement.vitesseDeReprise(this);
-
-    }
-
     public void perdreVie(double degats, Tour tour){
         this.pv.set(Math.max(0, this.pv.get() - degats));
         this.comportement.apresDegats(this, tour);
