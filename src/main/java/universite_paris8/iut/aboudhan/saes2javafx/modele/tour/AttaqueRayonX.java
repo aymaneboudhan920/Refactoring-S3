@@ -51,6 +51,7 @@ public class AttaqueRayonX implements StratAttaque {
 
     @Override
     public void reinitialiser() {
+        if (rayonActuel != null) rayonActuel.setDetruit(true);
         this.degatsActuels = DEGATS_MIN;
         this.cibleActuelle = null;
         this.rayonActuel = null;
