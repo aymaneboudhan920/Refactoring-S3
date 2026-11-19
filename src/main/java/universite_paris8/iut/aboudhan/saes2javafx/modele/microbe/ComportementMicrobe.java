@@ -6,10 +6,6 @@ public interface ComportementMicrobe {
     default void mettreAJourVitesse(Microbe microbe) {
     }
 
-    default double vitesseDeReprise(Microbe microbe) {
-        return microbe.vitesseDeBase;
-    }
-
     default void apresDegats(Microbe microbe, Tour tour) {
     }
 
