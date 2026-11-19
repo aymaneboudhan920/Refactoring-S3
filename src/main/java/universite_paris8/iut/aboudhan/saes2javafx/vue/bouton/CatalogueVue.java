@@ -83,31 +83,31 @@ public class CatalogueVue implements FenetreVue {
         int prixGel = prixEquipements.getOrDefault("potion_gel", 75);
 
         btnScientifique.setOnAction(e -> afficherTexteDescriptif(
-                "TOUR SCIENTIFIQUE",
+                "TOUR SCIENTIFIQUE LEVEL 1",
                 "Prix : " + prixSci + "$\n\n" +
                         "Envoie des seringues en coup par coup sur le premier microbe entrant dans sa zone de portée.\n\n" +
                         "■ Portée : 4 cases\n■ Dégâts : 10 par seconde\n■ Vitesse de tir : 1.0/s"
         ));
 
         btnChimiste.setOnAction(e -> afficherTexteDescriptif(
-                "TOUR CHIMISTE",
+                "TOUR CHIMISTE LEVEL 1",
                 "Prix : " + prixChi + "$\n\n" +
                         "Jette des potions coup par coup sur premier microbe entrant dans sa zone de portée et fais des dégâts sur les microbes qui se trouve au alentour.\n\n" +
                         "■ Portée : 3 cases\n■ Dégâts : 16 par seconde\n■ Vitesse de tir : 0.33/s"
         ));
 
         btnScanner.setOnAction(e -> afficherTexteDescriptif(
-                "TOUR SCANNER",
+                "TOUR SCANNER LEVEL 1",
                 "Prix : " + prixScn + "$\n\n" +
                         "Fait des dégats en scannant tous les microbes qui se trouve dans sa zone de portée.\n\n" +
                         "■ Portée : 3 cases\n■ Dégâts : 10 par seconde\n■ Vitesse de tir : 0.8/s"
         ));
 
         btnRayonX.setOnAction(e -> afficherTexteDescriptif(
-                "TOUR RAYON X",
+                "TOUR RAYON X LEVEL 1",
                 "Prix : " + prixRay + "$\n\n" +
                         "Envoie un rayon laser sur le 1er microbes qui se trouve dans sa zone de portée et fait de plus en plus de dégats.\n\n" +
-                        "■ Portée : 3 cases\n■ Dégâts : 2 par seconde\n■ Vitesse de tir : 10/s et se multiplie par 3 chaque seconde."
+                        "■ Portée : 3 cases\n■ DégâtsMin : 0.5 (x1.3 à chaque dégat infligé)\n■ DégâtsMax : 40\n■ Vitesse de tir : Continu."
         ));
 
         btnSoin.setOnAction(e -> afficherTexteDescriptif(
