@@ -63,13 +63,4 @@ public class ComportementVaricelle implements ComportementMicrobe {
             microbe.fixerVitesseActu(microbe.getVitesseActu() / 2.0);
         }
     }
-
-    @Override
-    public double vitesseDeReprise(Microbe microbe) {
-        return switch (etat) {
-            case ETAT_ACCELERATION -> VITESSE_ACCELEREE;
-            case ETAT_SOMMEIL      -> 0;
-            default                -> microbe.vitesseDeBase;
-        };
-    }
 }
